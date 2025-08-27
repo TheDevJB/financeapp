@@ -1,5 +1,13 @@
 package com.financeapp.finance.model;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,9 +35,20 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @JsonIgnore
     private String password;
+
+    @CreationTimestamp
+    @Column(name = "create_at", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "update_at", nullable = false)
+    private Instant updatedAt;
+
+    @Column(name = "total_balance", updatable = true)
+    private BigDecimal totalBalance;
 }
