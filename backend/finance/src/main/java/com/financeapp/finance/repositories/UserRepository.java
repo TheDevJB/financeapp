@@ -1,14 +1,14 @@
-package com.financeapp.finance.repository;
+package com.financeapp.finance.repositories;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;   
 import org.springframework.stereotype.Repository;
 
-import com.financeapp.finance.model.User;
+import com.financeapp.finance.models.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer>{
+public interface UserRepository extends JpaRepository<User, Long>{
 
     Optional<User> findByUsername(String username);
-    Optional<User> findByUserId(Integer userId);
+    Optional<User> findByUserId(Long userId);
 }

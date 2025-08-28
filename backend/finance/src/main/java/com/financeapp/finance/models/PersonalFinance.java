@@ -1,4 +1,4 @@
-package com.financeapp.finance.model;
+package com.financeapp.finance.models;
 
 import java.math.BigDecimal;
 import java.time.Instant;
