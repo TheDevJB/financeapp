@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.financeapp.finance.exceptions.UserDoesNotExistException;
 import com.financeapp.finance.models.User;
 import com.financeapp.finance.repositories.UserRepository;
 
@@ -21,9 +22,10 @@ public class UserService {
     }
 
     @Transactional
-    public User registerUser(String username, String email, String rawPassword) {
+    public User registerUser(String username, String email, String rawPassword, String phone) {
         Optional<User> existingByUsername = userRepository.findByUsername(username);
-        if (existingByUsername.isPresent()) {
+        Optional<User> existingByEmail = userRepository.findByEmailOrPhone(email, phone);
+        if (existingByUsername.isPresent() && existingByEmail.isPresent()) {
             throw new IllegalArgumentException("Username already exists");
         }
 
@@ -34,6 +36,11 @@ public class UserService {
         user.setPassword(hashedPassword);
 
         return userRepository.save(user);
+
+    }
+
+    public User getUserByUsername(String username){
+        return userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
     }
 
 }
