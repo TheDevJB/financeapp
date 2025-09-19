@@ -20,25 +20,17 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User getUserById(Long userId){
-        return userRepository.findById(userId).orElseThrow(UserDoesNotExistException::new);
-    } 
-
     public User getUserByUsername(String username){
-        return userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+        return userRepository.findByUsername(username).orElseThrow(() -> new UserDoesNotExistException("Username not found"));
     }
 
     public boolean authenticateUser(String username, String rawPassword){
-        User user = userRepository.findByUsername(username)
-            .orElseThrow(UserDoesNotExistException::new);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new UserDoesNotExistException("User not found"));
         return passwordEncoder.matches(rawPassword, user.getPassword());
     }
 
     public User getUserByEmail(String email){
-        return userRepository.findByEmail(email).orElseThrow(UserDoesNotExistException::new);
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserDoesNotExistException("Email not found"));
     }
 
-    public User getUserByPhone(String phone){
-        return userRepository.findByPhone(phone).orElseThrow(UserDoesNotExistException::new);
-    }
 }
