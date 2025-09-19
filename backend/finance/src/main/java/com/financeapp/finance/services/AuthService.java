@@ -34,4 +34,11 @@ public class AuthService {
         return passwordEncoder.matches(rawPassword, user.getPassword());
     }
 
+    public User getUserByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(UserDoesNotExistException::new);
+    }
+
+    public User getUserByPhone(String phone){
+        return userRepository.findByPhone(phone).orElseThrow(UserDoesNotExistException::new);
+    }
 }

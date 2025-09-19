@@ -11,5 +11,6 @@ import com.financeapp.finance.models.User;
 public interface UserRepository extends JpaRepository<User, Long>{
 
     Optional<User> findByUsername(String username);
-    Optional<User> findByEmailOrPhone(String email, String phone);  
+    Optional<User> findByEmail(String email);
+    Optional<User> findByPhone(String phone);
 }

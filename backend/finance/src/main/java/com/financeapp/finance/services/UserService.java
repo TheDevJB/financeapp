@@ -23,9 +23,8 @@ public class UserService {
 
     @Transactional
     public User registerUser(String username, String email, String rawPassword, String phone) {
-        Optional<User> existingByUsername = userRepository.findByUsername(username);
-        Optional<User> existingByEmail = userRepository.findByEmailOrPhone(email, phone);
-        if (existingByUsername.isPresent() && existingByEmail.isPresent()) {
+        Optional<User> findByUsername = userRepository.findByUsername(username);
+        if (findByUsername.isPresent()){
             throw new IllegalArgumentException("Username already exists");
         }
 
@@ -33,6 +32,7 @@ public class UserService {
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
+        user.setPhone(phone);
         user.setPassword(hashedPassword);
 
         return userRepository.save(user);
@@ -40,7 +40,6 @@ public class UserService {
     }
 
     public User getUserByUsername(String username){
-        return userRepository.findByUsername(username).orElseThrow(UserDoesNotExistException::new);
+        return userRepository.findByUsername(username).orElseThrow(() -> new UserDoesNotExistException("User not found"));
     }
-
 }

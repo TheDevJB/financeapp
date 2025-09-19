@@ -32,14 +32,16 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
     @JsonIgnore
     private String password;
+
+    private String phone;
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)

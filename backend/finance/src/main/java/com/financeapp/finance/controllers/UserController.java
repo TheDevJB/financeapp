@@ -12,7 +12,7 @@ import com.financeapp.finance.services.UserService;
 
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
