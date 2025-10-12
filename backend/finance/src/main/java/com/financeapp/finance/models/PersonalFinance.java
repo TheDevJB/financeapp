@@ -57,5 +57,69 @@ public class PersonalFinance {
     private BigDecimal gasBudget;
 
     @Column(name = "emergency_fund_budget")
-    private BigDecimal emergencyFundBudget;
+    private Integer emergencyFundBudget;
+
+    public BigDecimal getMonthlyIncome(){
+        return monthlyIncome;
+    }
+
+    public void setMonthlyIncome(BigDecimal monthlyIncome){
+        this.monthlyIncome = monthlyIncome;
+    }
+
+    public BigDecimal getCurrentSavings(){
+        return currentSavings;
+    }
+
+    public void setCurrentSavings(BigDecimal currentSavings){
+        this.currentSavings = currentSavings;
+    }
+
+    public BigDecimal getSavingsGoal(){
+        return savingsGoal;
+    }
+
+    public void setSavingsGoal(BigDecimal savingsGoal){
+        this.savingsGoal = savingsGoal;
+    }
+
+    public BigDecimal getFoodBudget(){
+        return foodBudget;
+    }
+
+    public void setFoodBudget(BigDecimal foodBudget){
+        this.foodBudget = foodBudget;
+    }
+
+    public BigDecimal getEntertainmentBudget(){
+        return entertainmentBudget;
+    }  
+
+    public void setEntertainmentBudget(BigDecimal entertainmentBudget){
+        this.entertainmentBudget = entertainmentBudget;
+    }
+
+    public BigDecimal getUtilitiesBudget(){
+        return utilitiesBudget;
+    }
+
+    public void setUtilitiesBudget(BigDecimal utilitiesBudget){
+        this.utilitiesBudget = utilitiesBudget;
+    }
+
+    public BigDecimal getGasBudget(){
+        return gasBudget;
+    } 
+
+    public void setGasBudget(BigDecimal gasBudget){
+        this.gasBudget = gasBudget;
+    }
+
+    public Integer getEmergencyFundBudget(){
+        return emergencyFundBudget;
+    }
+
+    public void setEmergencyFundBudget(Integer emergencyFundBudget){
+        this.emergencyFundBudget = emergencyFundBudget;
+    }
 }
