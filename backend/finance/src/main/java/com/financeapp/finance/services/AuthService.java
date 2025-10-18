@@ -3,6 +3,7 @@ package com.financeapp.finance.services;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.financeapp.finance.exceptions.EmailDoesNotExistException;
 import com.financeapp.finance.exceptions.UserDoesNotExistException;
 import com.financeapp.finance.models.User;
 import com.financeapp.finance.repositories.UserRepository;
@@ -30,7 +31,6 @@ public class AuthService {
     }
 
     public User getUserByEmail(String email){
-        return userRepository.findByEmail(email).orElseThrow(() -> new UserDoesNotExistException("Email not found"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new EmailDoesNotExistException("Email not found"));
     }
-
 }

@@ -19,6 +19,19 @@ import lombok.Data;
 @Table(name = "users")
 @Data
 public class User {
+
+    public User(){
+        
+    }
+
+    public User(String firstName, String lastName, String username, String email, String phone){
+        super();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+    }
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -104,5 +117,10 @@ public class User {
 
     public void setPhone(String phone){
         this.phone = phone;
+    }
+
+    @Override
+    public String toString(){
+        return "RegistrationObject [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", username=" + username + ", phone=" + phone + "]";
     }
 }
