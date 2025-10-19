@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.financeapp.finance.dto.FindUsernameDTO;
 import com.financeapp.finance.dto.UserRegisterDTO;
 import com.financeapp.finance.exceptions.UserDoesNotExistException;
 import com.financeapp.finance.models.User;
@@ -49,6 +50,13 @@ public class UserService {
         user.setPassword(encodedPassword);
 
         return userRepository.save(user);
+    }
+
+    public String verifyUsername(FindUsernameDTO cred){
+        User user = userRepository
+            .findByUsernameOrEmail(cred.getUsername(), cred.getEmail())
+            .orElseThrow(() -> new UserDoesNotExistException("Username not found"));
+            return user.getUsername();
     }
 
 }

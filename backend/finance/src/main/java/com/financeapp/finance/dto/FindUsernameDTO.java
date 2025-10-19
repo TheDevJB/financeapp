@@ -7,7 +7,6 @@ public class FindUsernameDTO {
     private String phone;
 
     public FindUsernameDTO(){
-        super();
     }
 
     public FindUsernameDTO(String username, String email, String phone){

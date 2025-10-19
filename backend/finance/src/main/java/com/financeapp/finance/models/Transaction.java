@@ -31,4 +31,12 @@ public class Transaction {
 
     @Column(name = "description")
     private String description;
+
+    @Column(name = "account_id")
+    private String accountId;
+
+    @Override
+    public String toString(){
+        return "Transaction [transactionId=" + transactionId + ", dollarAmount=" + dollarAmount + ", description=" + description + ", accountId=" + accountId + "]";
+    }
 }
