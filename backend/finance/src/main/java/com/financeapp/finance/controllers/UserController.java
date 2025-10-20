@@ -10,7 +10,6 @@ import com.financeapp.finance.models.User;
 import com.financeapp.finance.services.AuthService;
 import com.financeapp.finance.services.UserService;
 
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -19,13 +18,13 @@ public class UserController {
     private final AuthService authService;
 
     @Autowired
-    public UserController(UserService userService, AuthService authService){
+    public UserController(UserService userService, AuthService authService) {
         this.userService = userService;
         this.authService = authService;
     }
 
     @GetMapping("/profile/{username}")
-    public User getUserByUsername(@PathVariable("username") String username){
+    public User getUserByUsername(@PathVariable("username") String username) {
         return userService.getUserByUsername(username);
     }
 }

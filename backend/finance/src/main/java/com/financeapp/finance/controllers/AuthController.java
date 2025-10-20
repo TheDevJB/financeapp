@@ -4,7 +4,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,11 +21,11 @@ import com.financeapp.finance.services.UserService;
 public class AuthController {
 
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
+    //private final AuthenticationManager authenticationManager;
     
-    public AuthController(UserService userService, AuthenticationManager authenticationManager){
+    public AuthController(UserService userService){
         this.userService = userService;
-        this.authenticationManager = authenticationManager;
+        //this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/register")
