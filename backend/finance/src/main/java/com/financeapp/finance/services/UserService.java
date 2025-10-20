@@ -58,5 +58,4 @@ public class UserService {
             .orElseThrow(() -> new UserDoesNotExistException("Username not found"));
             return user.getUsername();
     }
-
 }
