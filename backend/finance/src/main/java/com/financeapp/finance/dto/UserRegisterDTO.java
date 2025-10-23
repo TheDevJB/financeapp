@@ -49,4 +49,8 @@ public class UserRegisterDTO {
     public void setLastName(String lastName){
         this.lastName = lastName;
     }
+
+    public String ToString(){
+        return "UserRegisterDTO [username=" + username + ", email=" + email + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+    }
 }

@@ -1,6 +1,5 @@
 package com.financeapp.finance.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,6 @@ public class UserController {
     private final UserService userService;
     private final AuthService authService;
 
-    @Autowired
     public UserController(UserService userService, AuthService authService) {
         this.userService = userService;
         this.authService = authService;
