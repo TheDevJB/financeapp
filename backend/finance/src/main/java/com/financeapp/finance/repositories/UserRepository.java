@@ -4,13 +4,12 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;   
 import org.springframework.stereotype.Repository;
 
-import com.financeapp.finance.entities.User;
+import com.financeapp.finance.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
 
     Optional<User> findByUsername(String username);
     Optional<User> findByEmail(String email);
-    Optional<User> findByPhone(String phone);
-    Optional<User> findByUsernameOrEmail(String email, String username);
+    Optional<User> findByUsernameOrEmailOrPhone(String email, String username);
 }

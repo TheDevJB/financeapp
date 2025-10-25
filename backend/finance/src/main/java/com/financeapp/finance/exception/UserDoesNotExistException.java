@@ -1,4 +1,4 @@
-package com.financeapp.finance.exceptions;
+package com.financeapp.finance.exception;
 
 public class UserDoesNotExistException extends RuntimeException{
 

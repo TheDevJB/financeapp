@@ -1,4 +1,4 @@
-package com.financeapp.finance.services;
+package com.financeapp.finance.service;
 
 import org.springframework.stereotype.Service;
 

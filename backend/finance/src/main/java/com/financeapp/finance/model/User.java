@@ -1,9 +1,4 @@
-package com.financeapp.finance.entities;
-
-import java.time.Instant;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+package com.financeapp.finance.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -14,11 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "users")
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class User {
+public class User extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,14 +36,4 @@ public class User {
 
     @JsonIgnore
     private String password;
-
-    private String phone;
-
-    @CreationTimestamp
-    @Column(name = "create_at", nullable = false, updatable = false)
-    private Instant createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "update_at", nullable = false)
-    private Instant updatedAt;
 }
