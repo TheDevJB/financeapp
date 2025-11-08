@@ -46,11 +46,11 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/api/public/**").permitAll()
+                .requestMatchers("/api/auth/**", "/api/public/**", "/public/**").permitAll()
                 .anyRequest().authenticated()     
             )
             .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> {})
+                .jwt(jwt -> jwt.decoder(jwtDecoder()))
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -63,6 +63,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
      
+    @Bean
     public JwtEncoder jwtEncoder(){
         JWK jwk = new RSAKey.Builder(this.publicKey)
             .privateKey(this.privateKey)
@@ -71,6 +72,7 @@ public class SecurityConfig {
         return new NimbusJwtEncoder(jwks);
     }
 
+    @Bean
     public JwtDecoder jwtDecoder(){
         return NimbusJwtDecoder.withPublicKey(this.publicKey).build();
     }
