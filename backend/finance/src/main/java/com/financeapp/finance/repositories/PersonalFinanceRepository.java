@@ -10,9 +10,9 @@ import com.financeapp.finance.model.PersonalFinance;
 import com.financeapp.finance.model.User;
 
 @Repository
-public interface PersonalFinanceRepository extends JpaRepository<PersonalFinance, Long>{
+public interface PersonalFinanceRepository extends JpaRepository<PersonalFinance, Integer>{
 
-    List<PersonalFinance> findByUserUserId(Long userId);
+    List<PersonalFinance> findByUserUserId(Integer userId);
     Optional<PersonalFinance> findByUser(User user);
-    Optional<PersonalFinance> findByIdAndUserUserId(Long id, Long userId);
+    Optional<PersonalFinance> findByIdAndUserUserId(Long id, Integer userId);
 }

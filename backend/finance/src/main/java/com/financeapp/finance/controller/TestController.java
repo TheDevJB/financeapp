@@ -41,5 +41,4 @@ public class TestController {
         String token = jwtEncoder.encode(org.springframework.security.oauth2.jwt.JwtEncoderParameters.from(claims)).getTokenValue();
         return Map.of("token", token);
     }
-
 }
