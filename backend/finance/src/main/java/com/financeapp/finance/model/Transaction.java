@@ -14,14 +14,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 
 @Entity
 @Table(name = "transactions")
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class Transaction extends AccountEntity{
+public class Transaction{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
