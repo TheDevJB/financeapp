@@ -55,4 +55,7 @@ public class TransactionService {
 
         return transaction;
     }
+    //TODO: Create a withdraw method
+    //TODO: Create an AccountService to handle transfers, balance changes and figure out more.
+    //TODO: Search more ways how transacations work
 }
