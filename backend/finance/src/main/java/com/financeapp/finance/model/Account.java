@@ -17,7 +17,7 @@ public class Account {
 
     @Id
     @Column(name = "account_id")
-    private String accountId;
+    private Integer accountId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -27,5 +27,5 @@ public class Account {
     private BigDecimal balance;
 
     @Column(name = "account_type")
-    private String accountType;
+    private AccountType accountType;
 }
