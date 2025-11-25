@@ -59,4 +59,15 @@ public class UserServiceTest {
         assertEquals("testuser", result.getUsername());
         verify(userRepo.findByUsername("testuser"));
     }
+
+    @Test
+    void getUserByEmail_WhenUserExists_ReturnUser(){
+        when(userRepo.findByEmail("test@example.com")).thenReturn(Optional.of(testUser));
+
+        User result = userService.getUserByEmail("test@example.com");
+
+        assertNotNull(result);
+        assertEquals("test@example.com", result.getEmail());
+        verify(userRepo.findByEmail("test@example.com"));
+    }
 }
