@@ -2,6 +2,9 @@ package com.financeapp.finance.service;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.financeapp.finance.exception.AccountDoesNotExistException;
 import com.financeapp.finance.model.Account;
 import com.financeapp.finance.model.AccountType;
@@ -14,6 +17,7 @@ public class AccountService {
     private final AccountRepository accountRepo;
     private final AccountType accountType;
     private final User user;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
     public AccountService(AccountRepository accountRepo, AccountType accountType, User user){
         this.accountRepo = accountRepo;
@@ -54,5 +58,16 @@ public class AccountService {
         accountRepo.save(account);
     
         return account;
+    }
+
+    public void validateAccountType(String accountTypeString){
+        try{
+            AccountType type = AccountType.valueOf(accountTypeString.toUpperCase());
+            LOGGER.info("Valid account type: " + type);
+        }
+        catch(IllegalArgumentException e){
+            LOGGER.info("Invalid account type: " + accountTypeString);
+            throw new AccountDoesNotExistException("This account type is not valid");
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.financeapp.finance.service;
 
 import java.math.BigDecimal;
 
+import com.financeapp.finance.exception.AccountDoesNotExistException;
 import com.financeapp.finance.exception.TransactionDoesNotExistException;
 import com.financeapp.finance.model.Transaction;
 import com.financeapp.finance.repositories.TransactionRepository;
@@ -17,6 +18,14 @@ public class TransactionService {
     public Transaction getTransactionByTransactionId(Long transactionId){
         return transactionRepo.findByTransactionId(transactionId).orElseThrow(TransactionDoesNotExistException::new);
     } 
+
+    public Transaction getAccountByAccountId(String accountId){
+        return transactionRepo.findByAccountId(accountId).orElseThrow(AccountDoesNotExistException::new);
+    }
+
+    public Transaction getTransactionByAccountIdOrTransactionId(String accountId, Long transactionId){
+        return transactionRepo.findByAccountIdOrTransactionId(accountId, transactionId).orElseThrow(TransactionDoesNotExistException::new);
+    }
 
     public Transaction getTransactionType(String transactionType, BigDecimal dollarAmount, String category, String accountId, String description){
         Transaction transaction = new Transaction();
