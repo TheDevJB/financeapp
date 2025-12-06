@@ -11,7 +11,6 @@ import com.financeapp.finance.service.UserService;
 
 @RestController
 @RequestMapping("/user")
-
 public class UserController {
 
     private final UserService userService;
