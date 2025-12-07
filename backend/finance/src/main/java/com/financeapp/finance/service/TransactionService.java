@@ -4,15 +4,20 @@ import java.math.BigDecimal;
 
 import com.financeapp.finance.exception.AccountDoesNotExistException;
 import com.financeapp.finance.exception.TransactionDoesNotExistException;
+import com.financeapp.finance.model.Account;
+import com.financeapp.finance.model.AccountType;
 import com.financeapp.finance.model.Transaction;
+import com.financeapp.finance.repositories.AccountRepository;
 import com.financeapp.finance.repositories.TransactionRepository;
 
 public class TransactionService {
 
     private final TransactionRepository transactionRepo;
+    private final AccountRepository accountRepo;
 
-    public TransactionService(TransactionRepository transactionRepo){
+    public TransactionService(TransactionRepository transactionRepo, AccountRepository accountRepo){
         this.transactionRepo = transactionRepo;
+        this.accountRepo = accountRepo;
     }
 
     public Transaction getTransactionByTransactionId(Long transactionId){
@@ -46,5 +51,12 @@ public class TransactionService {
         transactionRepo.save(transaction);
 
         return transaction;
+    }
+    
+    public void balanceAmount(BigDecimal dollarAmount, AccountType accountType, Integer accountId){
+        Account  account = accountRepo.findByAccountId(accountId).orElseThrow(() -> new RuntimeException("Account not found with id" + accountId));
+
+        account.setBalance(dollarAmount);
+        accountRepo.save(account);
     }
 }
