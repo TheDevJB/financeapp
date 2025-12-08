@@ -11,7 +11,6 @@ import com.financeapp.finance.service.TransactionService;
 @RestController
 @RequestMapping("/api/v1/transactions")
 public class TransactionController {
-//TODO: add an API that inputs a balance
 
     private final TransactionService transactionService;
 
@@ -19,7 +18,7 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("user/{userId}/transaction/{transactionId}")
+    @GetMapping("/user/{userId}/transaction/{transactionId}")
     public Transaction getTransactionByTransactionId(@PathVariable Integer userId, @PathVariable Long transactionId){
         return transactionService.getTransactionByTransactionId(transactionId);
     }

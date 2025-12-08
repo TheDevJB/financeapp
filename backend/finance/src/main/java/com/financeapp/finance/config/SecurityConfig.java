@@ -45,13 +45,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
             .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/api/public/**", "/public/**").permitAll()
-                .anyRequest().authenticated()     
+                .requestMatchers("/api/auth/**", "/api/public/**", "/public/**", "/api/v1/transactions/**").permitAll()
+                .anyRequest().permitAll()     
             )
-            .oauth2ResourceServer(oauth2 -> oauth2
-                .jwt(jwt -> jwt.decoder(jwtDecoder()))
-            )
+            // .oauth2ResourceServer(oauth2 -> oauth2
+            //     .jwt(jwt -> jwt.decoder(jwtDecoder()))
+            // )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             );
