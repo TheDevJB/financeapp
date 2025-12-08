@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.financeapp.finance.exception.AccountDoesNotExistException;
 import com.financeapp.finance.model.Account;
@@ -11,18 +12,16 @@ import com.financeapp.finance.model.AccountType;
 import com.financeapp.finance.model.User;
 import com.financeapp.finance.repositories.AccountRepository;
 
-
+@Service
 public class AccountService {
 
     private final AccountRepository accountRepo;
-    private final AccountType accountType;
-    private final User user;
+    //private final User user;
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
-    public AccountService(AccountRepository accountRepo, AccountType accountType, User user){
+    public AccountService(AccountRepository accountRepo){
         this.accountRepo = accountRepo;
-        this.accountType = accountType;
-        this.user = user;
+        //this.user = user;
     }
     
     public Account createAccount(Integer accountId, User user, AccountType accountType, BigDecimal balance){

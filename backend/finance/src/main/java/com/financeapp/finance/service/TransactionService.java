@@ -2,6 +2,8 @@ package com.financeapp.finance.service;
 
 import java.math.BigDecimal;
 
+import org.springframework.stereotype.Service;
+
 import com.financeapp.finance.exception.AccountDoesNotExistException;
 import com.financeapp.finance.exception.TransactionDoesNotExistException;
 import com.financeapp.finance.model.Account;
@@ -10,6 +12,7 @@ import com.financeapp.finance.model.Transaction;
 import com.financeapp.finance.repositories.AccountRepository;
 import com.financeapp.finance.repositories.TransactionRepository;
 
+@Service
 public class TransactionService {
 
     private final TransactionRepository transactionRepo;
