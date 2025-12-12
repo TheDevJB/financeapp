@@ -15,11 +15,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-
 @Entity
 @Table(name = "transactions")
 @Data
-public class Transaction{
+public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +36,7 @@ public class Transaction{
     private String description;
 
     @Column(name = "account_id")
-    private String accountId;
+    private Long accountId;
 
     @Column(name = "transaction_type")
     private String transactionType;

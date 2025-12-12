@@ -27,17 +27,17 @@ public class TransactionService {
         return transactionRepo.findByTransactionId(transactionId).orElseThrow(TransactionDoesNotExistException::new);
     }
 
-    public Transaction getAccountByAccountId(String accountId) {
+    public Transaction getAccountByAccountId(Long accountId) {
         return transactionRepo.findByAccountId(accountId).orElseThrow(AccountDoesNotExistException::new);
     }
 
-    public Transaction getTransactionByAccountIdOrTransactionId(String accountId, Long transactionId) {
+    public Transaction getTransactionByAccountIdOrTransactionId(Long accountId, Long transactionId) {
         return transactionRepo.findByAccountIdOrTransactionId(accountId, transactionId)
                 .orElseThrow(TransactionDoesNotExistException::new);
     }
 
     public Transaction getTransactionType(String transactionType, BigDecimal dollarAmount, String category,
-            String accountId, String description) {
+            Long accountId, String description) {
         Transaction transaction = new Transaction();
 
         if (transactionType == null || transactionType.isEmpty()) {

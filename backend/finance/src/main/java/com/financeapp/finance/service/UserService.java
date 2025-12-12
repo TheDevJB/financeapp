@@ -28,7 +28,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User getUserById(Integer userId) {
+    public User getUserById(long userId) {
         return userRepo.findById(userId).orElseThrow(UserDoesNotExistException::new);
     }
 

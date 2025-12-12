@@ -15,12 +15,12 @@ import lombok.EqualsAndHashCode;
 @Table(name = "users")
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class User extends BaseEntity{
+public class User extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "first_name")
     private String firstName;

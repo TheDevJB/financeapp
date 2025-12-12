@@ -8,13 +8,11 @@ import org.springframework.stereotype.Repository;
 import com.financeapp.finance.model.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
-
-    Optional<User> findById(Integer userId);
+public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
 
     Optional<User> findByEmail(String email);
 
-    Optional<User> findByUsernameOrEmailOrPhone(String email, String username, String phone);
+    Optional<User> findByUsernameOrEmailOrPhone(String username, String email, String phone);
 }
