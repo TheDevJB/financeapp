@@ -18,30 +18,32 @@ public class TransactionService {
     private final TransactionRepository transactionRepo;
     private final AccountRepository accountRepo;
 
-    public TransactionService(TransactionRepository transactionRepo, AccountRepository accountRepo){
+    public TransactionService(TransactionRepository transactionRepo, AccountRepository accountRepo) {
         this.transactionRepo = transactionRepo;
         this.accountRepo = accountRepo;
     }
 
-    public Transaction getTransactionByTransactionId(Long transactionId){
+    public Transaction getTransactionByTransactionId(Long transactionId) {
         return transactionRepo.findByTransactionId(transactionId).orElseThrow(TransactionDoesNotExistException::new);
-    } 
+    }
 
-    public Transaction getAccountByAccountId(String accountId){
+    public Transaction getAccountByAccountId(String accountId) {
         return transactionRepo.findByAccountId(accountId).orElseThrow(AccountDoesNotExistException::new);
     }
 
-    public Transaction getTransactionByAccountIdOrTransactionId(String accountId, Long transactionId){
-        return transactionRepo.findByAccountIdOrTransactionId(accountId, transactionId).orElseThrow(TransactionDoesNotExistException::new);
+    public Transaction getTransactionByAccountIdOrTransactionId(String accountId, Long transactionId) {
+        return transactionRepo.findByAccountIdOrTransactionId(accountId, transactionId)
+                .orElseThrow(TransactionDoesNotExistException::new);
     }
 
-    public Transaction getTransactionType(String transactionType, BigDecimal dollarAmount, String category, String accountId, String description){
+    public Transaction getTransactionType(String transactionType, BigDecimal dollarAmount, String category,
+            String accountId, String description) {
         Transaction transaction = new Transaction();
 
-        if(transactionType == null || transactionType.isEmpty()){
+        if (transactionType == null || transactionType.isEmpty()) {
             throw new IllegalArgumentException("Transaction type is not valid");
         }
-        if(category == null || category.isEmpty()){
+        if (category == null || category.isEmpty()) {
             throw new IllegalArgumentException("Category is invalid");
         }
 
@@ -50,29 +52,45 @@ public class TransactionService {
         transaction.setDescription(description);
         transaction.setAccountId(accountId);
         transaction.setDollarAmount(dollarAmount);
-        
+
         transactionRepo.save(transaction);
 
         return transaction;
     }
-    
-    public void balanceAmount(BigDecimal dollarAmount, AccountType accountType, Integer accountId){
-        Account  account = accountRepo.findByAccountId(accountId).orElseThrow(() -> new RuntimeException("Account not found with id" + accountId));
+
+    public void balanceAmount(BigDecimal dollarAmount, AccountType accountType, Long accountId) {
+        Account account = accountRepo.findByAccountId(accountId)
+                .orElseThrow(() -> new RuntimeException("Account not found with id" + accountId));
 
         account.setBalance(dollarAmount);
         accountRepo.save(account);
     }
 
-    public Account deposit(Integer accountId, BigDecimal dollarAmount){
+    public Account deposit(Long accountId, BigDecimal dollarAmount) {
         Account account = accountRepo.findByAccountId(accountId).orElseThrow(AccountDoesNotExistException::new);
-    
-        if(dollarAmount == null || dollarAmount.compareTo(BigDecimal.ZERO) <= 0){
+
+        if (dollarAmount == null || dollarAmount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Dollar amount is not valid or below 0");
         }
-    
+
         account.setBalance(account.getBalance().add(dollarAmount));
         accountRepo.save(account);
-    
+
+        return account;
+    }
+
+    public Account transfer(Long accountId, BigDecimal dollarAmount, AccountType accountType, BigDecimal balance) {
+        Account account = accountRepo.findByAccountId(accountId).orElseThrow(AccountDoesNotExistException::new);
+
+        if (dollarAmount == null || dollarAmount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Dollar amount is not valid");
+        }
+
+        account.setAccountType(accountType);
+        // account.setDollarAmount(dollarAmount);
+        account.setBalance(balance);
+        accountRepo.save(account);
+
         return account;
     }
 }

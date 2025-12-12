@@ -1,5 +1,6 @@
 package com.financeapp.finance.service;
 
+import java.util.List;
 import java.math.BigDecimal;
 
 import org.slf4j.Logger;
@@ -15,9 +16,7 @@ import com.financeapp.finance.repositories.AccountRepository;
 @Service
 public class AccountService {
 
-    // TODO: Add getAllAccountsByUser() method
     // TODO: Add updateBalance() method for deposits/withdrawals
-    // TODO: Remove dead code (commented User field)
 
     private final AccountRepository accountRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
@@ -26,7 +25,19 @@ public class AccountService {
         this.accountRepo = accountRepo;
     }
 
-    public Account createAccount(Integer accountId, User user, AccountType accountType, BigDecimal balance) {
+    public Account getAccountById(Long accountId) {
+        return accountRepo.findByAccountId(accountId).orElseThrow(AccountDoesNotExistException::new);
+    }
+
+    public Account getAccountByUserAndAccountType(User user, AccountType accountType) {
+        return accountRepo.findByUserOrAccountType(user, accountType).orElseThrow(AccountDoesNotExistException::new);
+    }
+
+    public List<Account> getAllAccountsByUser(User user) {
+        return accountRepo.findAllAccountsByUser(user);
+    }
+
+    public Account createAccount(Long accountId, User user, AccountType accountType, BigDecimal balance) {
         Account newAccount = new Account();
 
         newAccount.setAccountId(accountId);
@@ -37,14 +48,6 @@ public class AccountService {
         accountRepo.save(newAccount);
 
         return newAccount;
-    }
-
-    public Account getAccountById(Integer accountId) {
-        return accountRepo.findByAccountId(accountId).orElseThrow(AccountDoesNotExistException::new);
-    }
-
-    public Account getAccountByUserAndAccountType(User user, AccountType accountType) {
-        return accountRepo.findByUserOrAccountType(user, accountType).orElseThrow(AccountDoesNotExistException::new);
     }
 
     public void validateAccountType(String accountTypeString) {
