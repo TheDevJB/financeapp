@@ -8,7 +8,9 @@ import com.financeapp.finance.exception.AccountDoesNotExistException;
 import com.financeapp.finance.exception.TransactionDoesNotExistException;
 import com.financeapp.finance.model.Account;
 import com.financeapp.finance.model.AccountType;
+import com.financeapp.finance.model.BudgetCategory;
 import com.financeapp.finance.model.Transaction;
+import com.financeapp.finance.model.TransactionType;
 import com.financeapp.finance.repositories.AccountRepository;
 import com.financeapp.finance.repositories.TransactionRepository;
 
@@ -27,30 +29,27 @@ public class TransactionService {
         return transactionRepo.findByTransactionId(transactionId).orElseThrow(TransactionDoesNotExistException::new);
     }
 
-    public Transaction getAccountByAccountId(Long accountId) {
-        return transactionRepo.findByAccountId(accountId).orElseThrow(AccountDoesNotExistException::new);
-    }
-
-    public Transaction getTransactionByAccountIdOrTransactionId(Long accountId, Long transactionId) {
-        return transactionRepo.findByAccountIdOrTransactionId(accountId, transactionId)
+    public Transaction getTransactionByAccountAndTransactionId(Account account, Long transactionId) {
+        return transactionRepo.findByAccountAndTransactionId(account, transactionId)
                 .orElseThrow(TransactionDoesNotExistException::new);
     }
 
-    public Transaction getTransactionType(String transactionType, BigDecimal dollarAmount, String category,
-            Long accountId, String description) {
+    public Transaction getTransactionType(TransactionType transactionType, BigDecimal dollarAmount,
+            BudgetCategory category,
+            Account account, String description) {
         Transaction transaction = new Transaction();
 
-        if (transactionType == null || transactionType.isEmpty()) {
+        if (transactionType == null) {
             throw new IllegalArgumentException("Transaction type is not valid");
         }
-        if (category == null || category.isEmpty()) {
-            throw new IllegalArgumentException("Category is invalid");
+        if (category == null) {
+            throw new IllegalArgumentException("Category type is invalid");
         }
 
         transaction.setTransactionType(transactionType);
         transaction.setCategory(category);
         transaction.setDescription(description);
-        transaction.setAccountId(accountId);
+        transaction.setAccount(account);
         transaction.setDollarAmount(dollarAmount);
 
         transactionRepo.save(transaction);
@@ -87,7 +86,6 @@ public class TransactionService {
         }
 
         account.setAccountType(accountType);
-        // account.setDollarAmount(dollarAmount);
         account.setBalance(balance);
         accountRepo.save(account);
 

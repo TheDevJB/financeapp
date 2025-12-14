@@ -16,40 +16,30 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "accounts")
+@Table(name = "income_source")
 @Data
-public class Account {
+public class IncomeSource {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "account_id")
-    private Long accountId;
+    private Long incomeSourceId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
-    @Column(name = "balance")
-    private BigDecimal balance;
+    @Column(name = "income_stream_name")
+    private String incomeStreamName;
 
-    @Column(name = "account_type")
+    @Column(name = "amount")
+    private BigDecimal amount;
+
+    @Column(name = "frequency")
     @Enumerated(EnumType.STRING)
-    private AccountType accountType;
+    private IncomeFrequency frequency;
 
-    @Column(name = "nickname")
-    private String nickname;
-
-    @Column(name = "interest_rate")
-    private BigDecimal interestRate;
-
-    @Column(name = "minimum_payment")
-    private BigDecimal minimumPayment;
-
-    @Column(name = "due_day")
-    private Integer dueDay;
-
-    @Column(name = "debt_account")
-    private Boolean debtAccount;
+    @Column(name = "is_active")
+    private Boolean isActive;
 
     @Column(name = "created_at")
     private Instant createdAt;

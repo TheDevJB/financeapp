@@ -5,8 +5,6 @@ import java.time.Instant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,40 +14,27 @@ import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "accounts")
+@Table(name = "budget_category")
 @Data
-public class Account {
+public class BudgetCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "account_id")
-    private Long accountId;
+    @Column(name = "category_id")
+    private Long categoryId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
-    @Column(name = "balance")
-    private BigDecimal balance;
+    @Column(name = "category_name")
+    private String categoryName;
 
-    @Column(name = "account_type")
-    @Enumerated(EnumType.STRING)
-    private AccountType accountType;
+    @Column(name = "monthly_budget")
+    private BigDecimal monthlyBudget;
 
-    @Column(name = "nickname")
-    private String nickname;
-
-    @Column(name = "interest_rate")
-    private BigDecimal interestRate;
-
-    @Column(name = "minimum_payment")
-    private BigDecimal minimumPayment;
-
-    @Column(name = "due_day")
-    private Integer dueDay;
-
-    @Column(name = "debt_account")
-    private Boolean debtAccount;
+    @Column(name = "is_fixed")
+    private Boolean isFixed;
 
     @Column(name = "created_at")
     private Instant createdAt;

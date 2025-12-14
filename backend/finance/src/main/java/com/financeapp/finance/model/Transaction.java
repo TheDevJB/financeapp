@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +28,7 @@ public class Transaction {
     private Long transactionId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
     private User user;
 
     @Column(name = "dollar_amount")
@@ -35,14 +37,17 @@ public class Transaction {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "account_id")
-    private Long accountId;
+    @ManyToOne
+    @JoinColumn(name = "account_id", referencedColumnName = "account_id", nullable = false)
+    private Account account;
 
     @Column(name = "transaction_type")
-    private String transactionType;
+    @Enumerated(EnumType.STRING)
+    private TransactionType transactionType;
 
-    @Column(name = "category")
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "category_id", nullable = false)
+    private BudgetCategory category;
 
     @CreationTimestamp
     @Column(name = "transaction_date")
