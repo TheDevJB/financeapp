@@ -65,8 +65,9 @@ public class TransactionService {
         accountRepo.save(account);
     }
 
-    public Account deposit(Long accountId, BigDecimal dollarAmount) {
-        Account account = accountRepo.findByAccountId(accountId).orElseThrow(AccountDoesNotExistException::new);
+    public Transaction deposit(Account account, BigDecimal dollarAmount, TransactionType transactionType,
+            BigDecimal balance) {
+        Transaction transaction = getTransactionType(transactionType, dollarAmount, null, account, "Deposit");
 
         if (dollarAmount == null || dollarAmount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Dollar amount is not valid or below 0");
@@ -75,7 +76,7 @@ public class TransactionService {
         account.setBalance(account.getBalance().add(dollarAmount));
         accountRepo.save(account);
 
-        return account;
+        return transaction;
     }
 
     public Account transfer(Long accountId, BigDecimal dollarAmount, AccountType accountType, BigDecimal balance) {
@@ -86,7 +87,7 @@ public class TransactionService {
         }
 
         account.setAccountType(accountType);
-        account.setBalance(balance);
+        account.setBalance(account.getBalance().add(dollarAmount));
         accountRepo.save(account);
 
         return account;
