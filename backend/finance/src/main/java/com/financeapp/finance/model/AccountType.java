@@ -7,7 +7,7 @@ public enum AccountType {
     PERSONAL_LOAN,
     SCHOOL_LOAN,
     INVESTMENT,
-    AUTO_LOAN,
+    CAR_LOAN,
     MORTGAGE,
     RENT
 }

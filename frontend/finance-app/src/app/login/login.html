@@ -5,7 +5,7 @@
     </div>
     <div class="auth-header">
       <h1>Welcome Back</h1>
-      <p>Sign in to your Finance Tracker account</p>
+      <p>Sign into your account</p>
     </div>
 
     <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
@@ -19,9 +19,11 @@
         <input type="password" id="password" formControlName="password" placeholder="Enter your password">
       </div>
 
-      <div *ngIf="errorMessage" class="error-message" style="color: red; margin-bottom: 10px;">
+      @if (errorMessage) {
+      <div class="error-message" style="color: red; margin-bottom: 10px;">
         {{ errorMessage }}
       </div>
+      }
 
       <button type="submit" class="btn-primary" [disabled]="!loginForm.valid">Sign In</button>
 
