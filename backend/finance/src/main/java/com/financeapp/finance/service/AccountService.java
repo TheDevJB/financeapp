@@ -16,8 +16,6 @@ import com.financeapp.finance.repositories.AccountRepository;
 @Service
 public class AccountService {
 
-    // TODO: Add updateBalance() method for deposits/withdrawals
-
     private final AccountRepository accountRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
@@ -37,12 +35,14 @@ public class AccountService {
         return accountRepo.findAllAccountsByUser(user);
     }
 
-    public Account createAccount(Long accountId, User user, AccountType accountType, BigDecimal balance) {
+    public Account createAccount(Long accountId, User user, AccountType accountType, BigDecimal amount,
+            BigDecimal balance) {
         Account newAccount = new Account();
 
         newAccount.setAccountId(accountId);
         newAccount.setUser(user);
         newAccount.setAccountType(accountType);
+        newAccount.setAmount(amount);
         newAccount.setBalance(balance);
 
         accountRepo.save(newAccount);
@@ -58,5 +58,20 @@ public class AccountService {
             LOGGER.info("Invalid account type: " + accountTypeString);
             throw new AccountDoesNotExistException("This account type is not valid");
         }
+    }
+
+    public void updateAccountBalance(Long accountId, AccountType accountType, BigDecimal amount, BigDecimal balance) {
+        Account account = getAccountById(accountId);
+
+        if (accountType != account.getAccountType()) {
+            throw new AccountDoesNotExistException("This account type is not valid");
+        }
+
+        account.setAccountType(accountType);
+        account.setAmount(amount);
+        account.setBalance(balance);
+        accountRepo.save(account);
+
+        LOGGER.info("Account balance updated");
     }
 }

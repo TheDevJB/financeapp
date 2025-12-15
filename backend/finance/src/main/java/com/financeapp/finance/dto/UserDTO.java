@@ -19,4 +19,9 @@ public class UserDTO {
     @NotNull(message = "Username is required")
     @Size(min = 5, max = 15, message = "Username must be between 5 and 15 chars")
     private String username;
+
+    @NotNull(message = "Password is required")
+    @Size(min = 6, message = "Password must be at least 6 chars")
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
+    private String password;
 }

@@ -83,7 +83,8 @@ public class AccountServiceTest {
     void getAccountByUserAndAccountType_WhenNotExists_ThrowException() {
         when(accountRepo.findByUserOrAccountType(testUser, AccountType.CHECKING)).thenReturn(Optional.empty());
 
-        assertThrows(AccountDoesNotExistException.class, () -> accountService.getAccountByUserAndAccountType(testUser, AccountType.CHECKING));
+        assertThrows(AccountDoesNotExistException.class,
+                () -> accountService.getAccountByUserAndAccountType(testUser, AccountType.CHECKING));
     }
 
     @Test
@@ -101,12 +102,15 @@ public class AccountServiceTest {
     void createAccount_Success() {
         when(accountRepo.save(any(Account.class))).thenReturn(testAccount);
 
-        Account result = accountService.createAccount(1L, testUser, AccountType.CHECKING, new BigDecimal("1000.00"));
+        Account result = accountService.createAccount(1L, testUser, AccountType.CHECKING, new BigDecimal("1250.00"),
+                new BigDecimal("1250.00"));
 
         assertNotNull(result);
         assertEquals(1L, result.getAccountId());
         assertEquals(testUser, result.getUser());
         assertEquals(AccountType.CHECKING, result.getAccountType());
+        assertEquals(new BigDecimal("1250.00"), result.getAmount());
+        assertEquals(new BigDecimal("1250.00"), result.getBalance());
         verify(accountRepo).save(any(Account.class));
     }
 

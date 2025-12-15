@@ -36,6 +36,9 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 
+    @Column(name = "amount")
+    private BigDecimal amount;
+
     @Column(name = "nickname")
     private String nickname;
 
