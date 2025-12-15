@@ -26,6 +26,7 @@ import com.financeapp.finance.model.User;
 import com.financeapp.finance.repositories.AccountRepository;
 
 @ExtendWith(MockitoExtension.class)
+@SuppressWarnings("null")
 public class AccountServiceTest {
 
     @Mock
