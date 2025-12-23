@@ -51,9 +51,6 @@ public class Account {
     @Column(name = "due_day")
     private Integer dueDay;
 
-    @Column(name = "debt_account")
-    private Boolean debtAccount;
-
     @Column(name = "created_at")
     private Instant createdAt;
 

@@ -18,4 +18,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<Account> findByUserOrAccountType(User user, AccountType accountType);
 
     List<Account> findAllAccountsByUser(User user);
+
+    List<Account> findAllByUser_UserId(Long userId);
 }

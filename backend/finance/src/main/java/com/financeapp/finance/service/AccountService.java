@@ -74,4 +74,34 @@ public class AccountService {
 
         LOGGER.info("Account balance updated");
     }
+
+    public List<Account> getAllAccountsByUserId(Long userId) {
+        return accountRepo.findAllByUser_UserId(userId);
+    }
+
+    public Account updateAccount(Long accountId, BigDecimal balance, BigDecimal amount, String nickname,
+            BigDecimal interestRate, BigDecimal minimumPayment, Integer dueDay) {
+        Account account = getAccountById(accountId);
+
+        if (balance != null) {
+            account.setBalance(balance);
+        }
+        if (amount != null) {
+            account.setAmount(amount);
+        }
+        if (nickname != null) {
+            account.setNickname(nickname);
+        }
+        if (interestRate != null) {
+            account.setInterestRate(interestRate);
+        }
+        if (minimumPayment != null) {
+            account.setMinimumPayment(minimumPayment);
+        }
+        if (dueDay != null) {
+            account.setDueDay(dueDay);
+        }
+        LOGGER.info("Account {} updated successfully", accountId);
+        return account;
+    }
 }

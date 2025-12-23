@@ -10,21 +10,16 @@ import lombok.Data;
 @Data
 public class AccountDTO {
     private Long accountId;
-
-    @NotNull(message = "User ID is required")
     private Long userId;
-
-    @NotNull(message = "Balance is required")
     private BigDecimal balance;
-
+    @NotNull(message = "Amount is required")
     private BigDecimal amount;
 
     @NotNull(message = "Account Type is required")
     private AccountType accountType;
-
     private String nickname;
     private BigDecimal interestRate;
     private BigDecimal minimumPayment;
+    @NotNull(message = "Due Day is required")
     private Integer dueDay;
-    private Boolean debtAccount;
 }
