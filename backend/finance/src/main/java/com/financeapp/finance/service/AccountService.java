@@ -1,12 +1,14 @@
 package com.financeapp.finance.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.math.BigDecimal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.financeapp.finance.dto.AccountDTO;
 import com.financeapp.finance.exception.AccountDoesNotExistException;
 import com.financeapp.finance.model.Account;
 import com.financeapp.finance.model.AccountType;
@@ -79,29 +81,17 @@ public class AccountService {
         return accountRepo.findAllByUser_UserId(userId);
     }
 
-    public Account updateAccount(Long accountId, BigDecimal balance, BigDecimal amount, String nickname,
-            BigDecimal interestRate, BigDecimal minimumPayment, Integer dueDay) {
+    public Account updateAccount(Long accountId, AccountDTO dto) {
         Account account = getAccountById(accountId);
 
-        if (balance != null) {
-            account.setBalance(balance);
-        }
-        if (amount != null) {
-            account.setAmount(amount);
-        }
-        if (nickname != null) {
-            account.setNickname(nickname);
-        }
-        if (interestRate != null) {
-            account.setInterestRate(interestRate);
-        }
-        if (minimumPayment != null) {
-            account.setMinimumPayment(minimumPayment);
-        }
-        if (dueDay != null) {
-            account.setDueDay(dueDay);
-        }
+        Optional.ofNullable(dto.getBalance()).ifPresent(account::setBalance);
+        Optional.ofNullable(dto.getAmount()).ifPresent(account::setAmount);
+        Optional.ofNullable(dto.getNickname()).ifPresent(account::setNickname);
+        Optional.ofNullable(dto.getInterestRate()).ifPresent(account::setInterestRate);
+        Optional.ofNullable(dto.getMinimumPayment()).ifPresent(account::setMinimumPayment);
+        Optional.ofNullable(dto.getDueDay()).ifPresent(account::setDueDay);
+
         LOGGER.info("Account {} updated successfully", accountId);
-        return account;
+        return accountRepo.save(account);
     }
 }
