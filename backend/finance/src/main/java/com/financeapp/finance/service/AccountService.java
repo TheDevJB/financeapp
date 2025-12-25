@@ -1,7 +1,6 @@
 package com.financeapp.finance.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.math.BigDecimal;
 
 import org.slf4j.Logger;
@@ -38,7 +37,7 @@ public class AccountService {
     }
 
     public Account createAccount(Long accountId, User user, AccountType accountType, BigDecimal amount,
-            BigDecimal balance) {
+            BigDecimal balance, AccountDTO dto) {
         Account newAccount = new Account();
 
         newAccount.setAccountId(accountId);
@@ -46,8 +45,13 @@ public class AccountService {
         newAccount.setAccountType(accountType);
         newAccount.setAmount(amount);
         newAccount.setBalance(balance);
+        newAccount.setNickname(dto.getNickname());
+        newAccount.setInterestRate(dto.getInterestRate());
+        newAccount.setDueDay(dto.getDueDay());
 
         accountRepo.save(newAccount);
+
+        LOGGER.info("Account {} created successfully", accountId);
 
         return newAccount;
     }
@@ -62,7 +66,8 @@ public class AccountService {
         }
     }
 
-    public void updateAccountBalance(Long accountId, AccountType accountType, BigDecimal amount, BigDecimal balance) {
+    public Account updateAccountBalance(Long accountId, AccountType accountType, BigDecimal amount,
+            BigDecimal balance) {
         Account account = getAccountById(accountId);
 
         if (accountType != account.getAccountType()) {
@@ -75,23 +80,11 @@ public class AccountService {
         accountRepo.save(account);
 
         LOGGER.info("Account balance updated");
+
+        return account;
     }
 
     public List<Account> getAllAccountsByUserId(Long userId) {
         return accountRepo.findAllByUser_UserId(userId);
-    }
-
-    public Account updateAccount(Long accountId, AccountDTO dto) {
-        Account account = getAccountById(accountId);
-
-        Optional.ofNullable(dto.getBalance()).ifPresent(account::setBalance);
-        Optional.ofNullable(dto.getAmount()).ifPresent(account::setAmount);
-        Optional.ofNullable(dto.getNickname()).ifPresent(account::setNickname);
-        Optional.ofNullable(dto.getInterestRate()).ifPresent(account::setInterestRate);
-        Optional.ofNullable(dto.getMinimumPayment()).ifPresent(account::setMinimumPayment);
-        Optional.ofNullable(dto.getDueDay()).ifPresent(account::setDueDay);
-
-        LOGGER.info("Account {} updated successfully", accountId);
-        return accountRepo.save(account);
     }
 }

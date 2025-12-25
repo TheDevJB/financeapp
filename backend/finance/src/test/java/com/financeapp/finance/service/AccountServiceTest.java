@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.financeapp.finance.dto.AccountDTO;
 import com.financeapp.finance.exception.AccountDoesNotExistException;
 import com.financeapp.finance.model.Account;
 import com.financeapp.finance.model.AccountType;
@@ -103,8 +104,9 @@ public class AccountServiceTest {
     void createAccount_Success() {
         when(accountRepo.save(any(Account.class))).thenReturn(testAccount);
 
+        AccountDTO dto = new AccountDTO();
         Account result = accountService.createAccount(1L, testUser, AccountType.CHECKING, new BigDecimal("1250.00"),
-                new BigDecimal("1250.00"));
+                new BigDecimal("1250.00"), dto);
 
         assertNotNull(result);
         assertEquals(1L, result.getAccountId());

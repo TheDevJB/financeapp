@@ -33,15 +33,17 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<AccountDTO> createAccount(@Valid @RequestBody AccountDTO accountDTO) {
+    public ResponseEntity<AccountDTO> createAccount(@PathVariable Long accountId,
+            @Valid @RequestBody AccountDTO accountDTO) {
         User user = userService.getUserById(accountDTO.getUserId());
 
         Account createdAccount = accountService.createAccount(
-                accountDTO.getAccountId(),
+                accountId,
                 user,
                 accountDTO.getAccountType(),
                 accountDTO.getAmount(),
-                accountDTO.getBalance());
+                accountDTO.getBalance(),
+                accountDTO);
 
         return new ResponseEntity<>(mapToDTO(createdAccount), HttpStatus.CREATED);
     }
@@ -61,7 +63,8 @@ public class AccountController {
     @PutMapping("/{accountId}")
     public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long accountId,
             @Valid @RequestBody AccountDTO accountDTO) {
-        Account updatedAccount = accountService.updateAccount(accountId, accountDTO);
+        Account updatedAccount = accountService.updateAccountBalance(accountId, accountDTO.getAccountType(),
+                accountDTO.getAmount(), accountDTO.getBalance());
         return ResponseEntity.ok(mapToDTO(updatedAccount));
     }
 
