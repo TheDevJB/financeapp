@@ -272,3 +272,86 @@
     font-size: 2rem;
   }
 }
+
+/* Add Account Button */
+.btn-add-account {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.btn-add-account:hover {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px rgba(220, 38, 38, 0.5);
+}
+
+.add-account-card p {
+  color: #888;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+/* No data message */
+.no-data {
+  color: #666;
+  font-size: 0.95rem;
+  padding: 1rem 0;
+}
+
+/* Account Items */
+.accounts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.account-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+
+.account-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(4px);
+}
+
+.account-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.account-name {
+  color: #fff;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.account-type {
+  color: #666;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.account-balance {
+  color: #4ade80;
+  font-weight: 700;
+  font-size: 1.1rem;
+  font-family: 'Outfit', sans-serif;
+}

@@ -4,7 +4,7 @@
       <h2>Personal Finance Tracker</h2>
     </div>
     <div class="nav-user">
-      <span>Welcome back!</span>
+      <span>Welcome back, {{ userName }}!</span>
       <a routerLink="/" class="btn-logout">Logout</a>
     </div>
   </nav>
@@ -16,42 +16,37 @@
     </div>
 
     <div class="dashboard-grid">
+      <!-- Total Balance Card -->
       <div class="dashboard-card">
         <h3>Total Balance</h3>
-        <p class="balance">$12,450.00</p>
-        <span class="trend positive">+5.2% this month</span>
+        <p class="balance">{{ totalBalance | currency }}</p>
       </div>
 
+      <!-- Accounts List Card -->
       <div class="dashboard-card">
-        <h3>Monthly Spending</h3>
-        <p class="spending">$3,240.00</p>
-        <span class="trend negative">+2.1% from last month</span>
-      </div>
-
-      <div class="dashboard-card">
-        <h3>Savings Goal</h3>
-        <p class="savings">$8,500 / $10,000</p>
-        <div class="progress-bar">
-          <div class="progress" style="width: 85%"></div>
+        <h3>Your Accounts</h3>
+        @if (accounts.length > 0) {
+        <div class="accounts-list">
+          @for (account of accounts; track account.accountId) {
+          <div class="account-item">
+            <div class="account-info">
+              <span class="account-name">{{ account.nickname || account.accountType }}</span>
+              <span class="account-type">{{ account.accountType }}</span>
+            </div>
+            <span class="account-balance">{{ account.balance | currency }}</span>
+          </div>
+          }
         </div>
+        } @else {
+        <p class="no-data">No accounts yet. Add your first account!</p>
+        }
       </div>
 
-      <div class="dashboard-card">
-        <h3>Recent Transactions</h3>
-        <div class="transaction-list">
-          <div class="transaction">
-            <span>Coffee Shop</span>
-            <span>-$4.50</span>
-          </div>
-          <div class="transaction">
-            <span>Salary Deposit</span>
-            <span>+$3,200.00</span>
-          </div>
-          <div class="transaction">
-            <span>Grocery Store</span>
-            <span>-$125.30</span>
-          </div>
-        </div>
+      <!-- Add Account Button Card -->
+      <div class="dashboard-card add-account-card">
+        <h3>Add New Account</h3>
+        <p>Track a new bank account, credit card, or loan</p>
+        <button class="btn-add-account">+ Add Account</button>
       </div>
     </div>
   </div>

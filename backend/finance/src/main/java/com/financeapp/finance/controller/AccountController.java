@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,12 +34,11 @@ public class AccountController {
     }
 
     @PostMapping
-    public ResponseEntity<AccountDTO> createAccount(@PathVariable Long accountId,
-            @Valid @RequestBody AccountDTO accountDTO) {
+    public ResponseEntity<AccountDTO> createAccount(@Valid @RequestBody AccountDTO accountDTO) {
         User user = userService.getUserById(accountDTO.getUserId());
 
         Account createdAccount = accountService.createAccount(
-                accountId,
+                accountDTO.getAccountId(),
                 user,
                 accountDTO.getAccountType(),
                 accountDTO.getAmount(),
@@ -66,6 +66,12 @@ public class AccountController {
         Account updatedAccount = accountService.updateAccountBalance(accountId, accountDTO.getAccountType(),
                 accountDTO.getAmount(), accountDTO.getBalance());
         return ResponseEntity.ok(mapToDTO(updatedAccount));
+    }
+
+    @DeleteMapping("/{accountId}")
+    public ResponseEntity<Void> deleteAccount(@PathVariable Long accountId) {
+        accountService.deleteAccount(accountId);
+        return ResponseEntity.noContent().build();
     }
 
     private AccountDTO mapToDTO(Account account) {

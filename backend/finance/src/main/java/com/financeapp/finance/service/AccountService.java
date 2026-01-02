@@ -87,4 +87,15 @@ public class AccountService {
     public List<Account> getAllAccountsByUserId(Long userId) {
         return accountRepo.findAllByUser_UserId(userId);
     }
+
+    public void deleteAccount(Long accountId) {
+        if (accountId == null) {
+            throw new IllegalArgumentException("Account ID cannot be null");
+        }
+        if (!accountRepo.existsById(accountId)) {
+            throw new AccountDoesNotExistException();
+        }
+        accountRepo.deleteById(accountId);
+        LOGGER.info("Account {} deleted successfully", accountId);
+    }
 }
