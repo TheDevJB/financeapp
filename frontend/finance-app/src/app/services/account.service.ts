@@ -19,7 +19,7 @@ export class AccountService {
         return this.http.get<Account>(`${this.apiUrl}/${accountId}`);
     }
 
-    getAccountsByUser(userId: number): Observable<Account[]> {
+    getAllAccountsByUser(userId: number): Observable<Account[]> {
         return this.http.get<Account[]>(`${this.apiUrl}/user/${userId}`);
     }
 

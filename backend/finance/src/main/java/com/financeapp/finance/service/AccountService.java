@@ -36,6 +36,7 @@ public class AccountService {
         return accountRepo.findAllAccountsByUser(user);
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public Account createAccount(Long accountId, User user, AccountType accountType, BigDecimal amount,
             BigDecimal balance, AccountDTO dto) {
         Account newAccount = new Account();
@@ -47,13 +48,14 @@ public class AccountService {
         newAccount.setBalance(balance);
         newAccount.setNickname(dto.getNickname());
         newAccount.setInterestRate(dto.getInterestRate());
+        newAccount.setMinimumPayment(dto.getMinimumPayment());
         newAccount.setDueDay(dto.getDueDay());
 
-        accountRepo.save(newAccount);
+        Account savedAccount = accountRepo.save(newAccount);
 
-        LOGGER.info("Account {} created successfully", accountId);
+        LOGGER.info("Account {} created successfully", savedAccount.getAccountId());
 
-        return newAccount;
+        return savedAccount;
     }
 
     public void validateAccountType(String accountTypeString) {
