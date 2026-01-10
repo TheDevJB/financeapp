@@ -9,7 +9,6 @@ public enum AccountType {
     KLARNA,
     PERSONAL_LOAN,
     SCHOOL_LOAN,
-    INVESTMENT,
     CAR_LOAN,
     MORTGAGE,
     RENT;

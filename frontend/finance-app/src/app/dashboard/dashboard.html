@@ -99,29 +99,23 @@
         placeholder="$0.00">
     </div>
 
-    @if (isLiabilityAccount(account.accountType)) {
     <div class="form-row">
       <div class="form-group half">
         <label for="dueDay">Due Day</label>
         <input type="number" id="dueDay" [(ngModel)]="account.dueDay" class="form-control" placeholder="Day (1-31)"
           min="1" max="31">
       </div>
-      @if (hasInterestRate(account.accountType)) {
       <div class="form-group half">
         <label for="interestRate">Interest Rate (%)</label>
         <input type="number" id="interestRate" [(ngModel)]="account.interestRate" class="form-control"
           placeholder="0.00">
       </div>
-      }
     </div>
-    @if (hasMinimumPayment(account.accountType)) {
     <div class="form-group">
       <label for="minimumPayment">Minimum Payment</label>
       <input type="text" id="minimumPayment" [ngModel]="formattedMinPayment" (input)="formatMinPayment($event)"
         class="form-control" placeholder="$0.00">
     </div>
-    }
-    }
     <div class="modal-actions">
       <button class="btn-cancel" (click)="showAddModal = false">Cancel</button>
       <button class="btn-confirm-add" (click)="addAccount(account!)" [disabled]="isLoading || !account.accountType">

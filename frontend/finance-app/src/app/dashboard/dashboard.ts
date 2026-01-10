@@ -28,9 +28,8 @@ export class DashboardComponent {
   formattedBalance: string = '';
   formattedMinPayment: string = '';
   accountTypes: string[] = [
-    'CHECKING', 'SAVINGS', 'CREDIT_CARD', 'AFFIRM', 'AFTER_PAY',
-    'KLARNA', 'PERSONAL_LOAN', 'SCHOOL_LOAN', 'INVESTMENT',
-    'CAR_LOAN', 'MORTGAGE', 'RENT'
+    'CHECKING', 'SAVINGS', 'MORTGAGE', 'RENT', 'CREDIT_CARD', 'AFFIRM', 'AFTER_PAY',
+    'KLARNA', 'PERSONAL_LOAN', 'SCHOOL_LOAN', 'CAR_LOAN'
   ];
 
   constructor(
@@ -52,7 +51,7 @@ export class DashboardComponent {
   }
 
   loadAccounts() {
-    console.log('Loading accounts for userId:', this.userId);
+    console.log('Loading accounts for user:', this.userId);
     this.accountService.getAllAccountsByUser(this.userId).subscribe({
       next: (accounts) => {
         console.log('Accounts loaded successfully:', accounts);
@@ -71,16 +70,6 @@ export class DashboardComponent {
       this.toastr.error('Account type is required');
       return false;
     }
-    if (this.isLiabilityAccount(account.accountType)) {
-      if (account.dueDay === undefined || account.dueDay === null) {
-        this.toastr.error('Due day is required for this account type');
-        return false;
-      }
-      if (this.hasInterestRate(account.accountType) && (account.interestRate === undefined || account.interestRate === null)) {
-        this.toastr.error('Interest rate is required for this account type');
-        return false;
-      }
-    }
     return true;
   }
 
@@ -95,7 +84,6 @@ export class DashboardComponent {
           this.isLoading = false;
           this.toastr.success('Account added successfully', 'Success');
 
-          // Small delay before closing to let them see the success state
           setTimeout(() => {
             this.showAddModal = false;
             this.account = null;
@@ -117,6 +105,9 @@ export class DashboardComponent {
     });
   }
 
+  private interestAccounts = ['CREDIT CARD', 'PERSONAL_LOAN', 'CAR_LOAN', 'AFFIRM', 'AFTER_PAY', 'KLARNA'];
+  private regAccounts = ['CHECKING', 'SAVINGS', 'MORTGAGE', 'RENT'];
+
   openAddAccountModal() {
     this.account = {
       userId: this.userId,
@@ -128,6 +119,10 @@ export class DashboardComponent {
     this.formattedBalance = '';
     this.formattedMinPayment = '';
     this.showAddModal = true;
+  }
+
+  showInterestAccountFields(type: string): boolean {
+    return this.interestAccounts.includes(type);
   }
 
   deleteAccount(accountId: number) {
@@ -148,28 +143,10 @@ export class DashboardComponent {
     this.showDeleteModal = true;
   }
 
-  isLiabilityAccount(type: string): boolean {
-    const liabilities = [
-      'CREDIT_CARD', 'AFFIRM', 'AFTER_PAY', 'KLARNA',
-      'PERSONAL_LOAN', 'SCHOOL_LOAN', 'CAR_LOAN',
-      'MORTGAGE', 'RENT'
-    ];
-    return liabilities.includes(type);
-  }
-
-  hasInterestRate(type: string): boolean {
-    return type !== 'MORTGAGE' && type !== 'RENT';
-  }
-
-  hasMinimumPayment(type: string): boolean {
-    return type !== 'MORTGAGE' && type !== 'RENT';
-  }
-
   formatBalance(event: any) {
-    const { formatted, raw } = this.applyCurrencyFormatting(event.target.value);
+    const { formatted, raw } = this.moneyFormatting(event.target.value);
     this.formattedBalance = formatted;
     event.target.value = formatted;
-    // Update the actual numeric balance for the model
     if (this.account) {
       this.account.balance = raw;
       this.account.amount = raw;
@@ -177,16 +154,15 @@ export class DashboardComponent {
   }
 
   formatMinPayment(event: any) {
-    const { formatted, raw } = this.applyCurrencyFormatting(event.target.value);
+    const { formatted, raw } = this.moneyFormatting(event.target.value);
     this.formattedMinPayment = formatted;
     event.target.value = formatted;
     if (this.account) this.account.minimumPayment = raw;
   }
 
-  private applyCurrencyFormatting(input: string): { formatted: string, raw: number } {
+  private moneyFormatting(input: string): { formatted: string, raw: number } {
     let value = input.replace(/[^0-9.]/g, '');
 
-    // Ensure only one decimal point
     const parts = value.split('.');
     if (parts.length > 2) {
       value = parts[0] + '.' + parts.slice(1).join('');
