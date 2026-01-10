@@ -122,6 +122,7 @@ export class DashboardComponent {
   }
 
   showInterestAccountFields(type: string): boolean {
+    const interestTypes = ['CREDIT CARD', 'PERSONAL_LOAN', 'CAR_LOAN', 'AFFIRM', 'AFTER_PAY', 'KLARNA'];
     return this.interestAccounts.includes(type);
   }
 
