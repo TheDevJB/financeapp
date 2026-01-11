@@ -2,6 +2,8 @@ package com.financeapp.finance.service;
 
 import java.math.BigDecimal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.financeapp.finance.exception.AccountDoesNotExistException;
@@ -13,12 +15,14 @@ import com.financeapp.finance.model.Transaction;
 import com.financeapp.finance.model.TransactionType;
 import com.financeapp.finance.repositories.AccountRepository;
 import com.financeapp.finance.repositories.TransactionRepository;
+import com.financeapp.finance.dto.TransferDTO;
 
 @Service
 public class TransactionService {
 
     private final TransactionRepository transactionRepo;
     private final AccountRepository accountRepo;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
 
     public TransactionService(TransactionRepository transactionRepo, AccountRepository accountRepo) {
         this.transactionRepo = transactionRepo;
@@ -65,31 +69,30 @@ public class TransactionService {
         accountRepo.save(account);
     }
 
-    public Transaction deposit(Account account, BigDecimal dollarAmount, TransactionType transactionType,
-            BigDecimal balance) {
-        Transaction transaction = getTransactionType(transactionType, dollarAmount, null, account, "Deposit");
+    public Transaction transfer(TransferDTO transferDTO) {
+        if (transferDTO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Dollar amount is below 0");
+        }
+        Transaction transaction = new Transaction();
 
-        if (dollarAmount == null || dollarAmount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Dollar amount is not valid or below 0");
+        Account sourceAccount = accountRepo.findByAccountId(transferDTO.getSourceAccountId())
+                .orElseThrow(AccountDoesNotExistException::new);
+
+        Account destAccount = accountRepo.findByAccountId(transferDTO.getDestAccountId())
+                .orElseThrow(AccountDoesNotExistException::new);
+
+        if (sourceAccount.getBalance().compareTo(transferDTO.getAmount()) < 0) {
+            throw new IllegalArgumentException("Insufficient balance");
         }
 
-        account.setBalance(account.getBalance().add(dollarAmount));
-        accountRepo.save(account);
+        sourceAccount.setBalance(sourceAccount.getBalance().subtract(transferDTO.getAmount()));
+        destAccount.setBalance(destAccount.getBalance().add(transferDTO.getAmount()));
+
+        accountRepo.save(sourceAccount);
+        accountRepo.save(destAccount);
+
+        LOGGER.info("Transfer of " + sourceAccount + "to" + destAccount + "successful");
 
         return transaction;
-    }
-
-    public Account transfer(Long accountId, BigDecimal dollarAmount, AccountType accountType, BigDecimal balance) {
-        Account account = accountRepo.findByAccountId(accountId).orElseThrow(AccountDoesNotExistException::new);
-
-        if (dollarAmount == null || dollarAmount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Dollar amount is not valid");
-        }
-
-        account.setAccountType(accountType);
-        account.setBalance(account.getBalance().add(dollarAmount));
-        accountRepo.save(account);
-
-        return account;
     }
 }
