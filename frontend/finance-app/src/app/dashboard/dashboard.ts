@@ -70,6 +70,19 @@ export class DashboardComponent {
       this.toastr.error('Account type is required');
       return false;
     }
+
+    if (this.showInterestAccountFields(account.accountType)) {
+      if (account.dueDay && (account.dueDay < 1 || account.dueDay > 31)) {
+        this.toastr.error('Due day must be between 1 and 31');
+        return false;
+      }
+    }
+
+    if (account.balance < 0) {
+      this.toastr.error('Balance must be greater than 0');
+      return false;
+    }
+
     return true;
   }
 
@@ -105,7 +118,7 @@ export class DashboardComponent {
     });
   }
 
-  private interestAccounts = ['CREDIT CARD', 'PERSONAL_LOAN', 'CAR_LOAN', 'AFFIRM', 'AFTER_PAY', 'KLARNA'];
+  private interestAccounts = ['CREDIT_CARD', 'PERSONAL_LOAN', 'CAR_LOAN', 'AFFIRM', 'AFTER_PAY', 'KLARNA'];
   private regAccounts = ['CHECKING', 'SAVINGS', 'MORTGAGE', 'RENT'];
 
   openAddAccountModal() {
@@ -122,7 +135,6 @@ export class DashboardComponent {
   }
 
   showInterestAccountFields(type: string): boolean {
-    const interestTypes = ['CREDIT CARD', 'PERSONAL_LOAN', 'CAR_LOAN', 'AFFIRM', 'AFTER_PAY', 'KLARNA'];
     return this.interestAccounts.includes(type);
   }
 
