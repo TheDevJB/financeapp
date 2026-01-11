@@ -118,7 +118,7 @@ export class DashboardComponent {
     });
   }
 
-  private interestAccounts = ['CREDIT_CARD', 'PERSONAL_LOAN', 'CAR_LOAN', 'AFFIRM', 'AFTER_PAY', 'KLARNA'];
+  private interestAccounts = ['CREDIT_CARD', 'PERSONAL_LOAN', 'CAR_LOAN', 'AFFIRM', 'AFTER_PAY', 'KLARNA', 'SCHOOL_LOAN'];
   private regAccounts = ['CHECKING', 'SAVINGS', 'MORTGAGE', 'RENT'];
 
   openAddAccountModal() {
@@ -136,6 +136,11 @@ export class DashboardComponent {
 
   showInterestAccountFields(type: string): boolean {
     return this.interestAccounts.includes(type);
+  }
+
+  showDueDay(type: string): boolean {
+    const dueDayTypes = ['MORTGAGE', 'RENT'];
+    return dueDayTypes.includes(type) || this.interestAccounts.includes(type);
   }
 
   deleteAccount(accountId: number) {

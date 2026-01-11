@@ -99,18 +99,18 @@
         placeholder="$0.00">
     </div>
 
+    @if (showDueDay(account.accountType)) {
+    <div class="form-group">
+      <label for="dueDay">Due Day</label>
+      <input type="number" id="dueDay" [(ngModel)]="account.dueDay" class="form-control" placeholder="Day (1-31)"
+        min="1" max="31">
+    </div>
+    }
+
     @if (showInterestAccountFields(account.accountType)) {
-    <div class="form-row">
-      <div class="form-group half">
-        <label for="dueDay">Due Day</label>
-        <input type="number" id="dueDay" [(ngModel)]="account.dueDay" class="form-control" placeholder="Day (1-31)"
-          min="1" max="31">
-      </div>
-      <div class="form-group half">
-        <label for="interestRate">Interest Rate (%)</label>
-        <input type="number" id="interestRate" [(ngModel)]="account.interestRate" class="form-control"
-          placeholder="0.00">
-      </div>
+    <div class="form-group">
+      <label for="interestRate">Interest Rate (%)</label>
+      <input type="number" id="interestRate" [(ngModel)]="account.interestRate" class="form-control" placeholder="0.00">
     </div>
     <div class="form-group">
       <label for="minimumPayment">Minimum Payment</label>
