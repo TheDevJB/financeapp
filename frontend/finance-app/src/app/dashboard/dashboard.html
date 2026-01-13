@@ -100,22 +100,24 @@
     </div>
 
     @if (showDueDay(account.accountType)) {
-    <div class="form-group">
+    <div class="form-group conditional">
       <label for="dueDay">Due Day</label>
       <input type="number" id="dueDay" [(ngModel)]="account.dueDay" class="form-control" placeholder="Day (1-31)"
         min="1" max="31">
+      <small class="text-muted">Day of the month payment is due</small>
     </div>
     }
 
     @if (showInterestAccountFields(account.accountType)) {
-    <div class="form-group">
+    <div class="form-group conditional">
       <label for="interestRate">Interest Rate (%)</label>
       <input type="number" id="interestRate" [(ngModel)]="account.interestRate" class="form-control" placeholder="0.00">
     </div>
-    <div class="form-group">
+    <div class="form-group conditional">
       <label for="minimumPayment">Minimum Payment</label>
       <input type="text" id="minimumPayment" [ngModel]="formattedMinPayment" (input)="formatMinPayment($event)"
         class="form-control" placeholder="$0.00">
+      <small class="text-muted">Minimum verified monthly payment</small>
     </div>
     }
     <div class="modal-actions">

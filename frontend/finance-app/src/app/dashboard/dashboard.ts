@@ -1,4 +1,5 @@
 import { Component, ChangeDetectorRef, NgZone } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -42,7 +43,7 @@ export class DashboardComponent {
 
   ngOnInit() {
     const user = this.authService.currentUser;
-    console.log('Dashboard ngOnInit - Current User:', user);
+    console.log('Current User Dashboard:', user);
     if (user) {
       this.userName = user.firstName;
       this.userId = user.userId ?? 0;
@@ -57,8 +58,9 @@ export class DashboardComponent {
         console.log('Accounts loaded successfully:', accounts);
         this.accounts = accounts;
         this.totalBalance = this.accounts.reduce((total, account) => total + account.balance, 0);
+        this.cdr.detectChanges();
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error loading accounts:', error);
         this.toastr.error('Failed to load accounts', 'Error');
       }
@@ -78,11 +80,12 @@ export class DashboardComponent {
       }
     }
 
-    if (account.balance < 0) {
-      this.toastr.error('Balance must be greater than 0');
-      return false;
+    if (this.showDueDay(account.accountType)) {
+      if (account.dueDay && (account.dueDay < 1 || account.dueDay > 31)) {
+        this.toastr.error('Choose a due day between 1 & 31');
+        return false;
+      }
     }
-
     return true;
   }
 
@@ -95,7 +98,8 @@ export class DashboardComponent {
         this.ngZone.run(() => {
           console.log('Account created successfully:', response);
           this.isLoading = false;
-          this.toastr.success('Account added successfully', 'Success');
+          this.loadAccounts();
+          this.toastr.success('Account added successfully');
 
           setTimeout(() => {
             this.showAddModal = false;
@@ -107,7 +111,7 @@ export class DashboardComponent {
           }, 1500);
         });
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         this.ngZone.run(() => {
           console.error('Error adding account:', error);
           this.isLoading = false;
@@ -124,7 +128,7 @@ export class DashboardComponent {
   openAddAccountModal() {
     this.account = {
       userId: this.userId,
-      accountType: '' as any,
+      accountType: '' as Account['accountType'],
       balance: 0,
       amount: 0,
       nickname: ''
@@ -140,12 +144,13 @@ export class DashboardComponent {
 
   showDueDay(type: string): boolean {
     const dueDayTypes = ['MORTGAGE', 'RENT'];
-    return dueDayTypes.includes(type) || this.interestAccounts.includes(type);
+    return dueDayTypes.includes(type);
   }
 
   deleteAccount(accountId: number) {
     this.accountService.deleteAccount(accountId).subscribe({
       next: () => {
+        this.showDeleteModal = false;
         this.loadAccounts();
         this.toastr.success('Account deleted successfully', 'Success');
       },
@@ -161,20 +166,24 @@ export class DashboardComponent {
     this.showDeleteModal = true;
   }
 
-  formatBalance(event: any) {
-    const { formatted, raw } = this.moneyFormatting(event.target.value);
+  formatBalance(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const data = input.value;
+    const { formatted, raw } = this.moneyFormatting(data);
     this.formattedBalance = formatted;
-    event.target.value = formatted;
+    input.value = formatted;
     if (this.account) {
       this.account.balance = raw;
       this.account.amount = raw;
     }
   }
 
-  formatMinPayment(event: any) {
-    const { formatted, raw } = this.moneyFormatting(event.target.value);
+  formatMinPayment(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const data = input.value;
+    const { formatted, raw } = this.moneyFormatting(data);
     this.formattedMinPayment = formatted;
-    event.target.value = formatted;
+    input.value = formatted;
     if (this.account) this.account.minimumPayment = raw;
   }
 

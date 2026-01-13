@@ -10,7 +10,6 @@ import com.financeapp.finance.exception.AccountDoesNotExistException;
 import com.financeapp.finance.exception.TransactionDoesNotExistException;
 import com.financeapp.finance.model.Account;
 import com.financeapp.finance.model.AccountType;
-import com.financeapp.finance.model.BudgetCategory;
 import com.financeapp.finance.model.Transaction;
 import com.financeapp.finance.model.TransactionType;
 import com.financeapp.finance.repositories.AccountRepository;
@@ -39,19 +38,14 @@ public class TransactionService {
     }
 
     public Transaction getTransactionType(TransactionType transactionType, BigDecimal dollarAmount,
-            BudgetCategory category,
             Account account, String description) {
         Transaction transaction = new Transaction();
 
         if (transactionType == null) {
             throw new IllegalArgumentException("Transaction type is not valid");
         }
-        if (category == null) {
-            throw new IllegalArgumentException("Category type is invalid");
-        }
 
         transaction.setTransactionType(transactionType);
-        transaction.setCategory(category);
         transaction.setDescription(description);
         transaction.setAccount(account);
         transaction.setDollarAmount(dollarAmount);

@@ -378,6 +378,30 @@
   color: white;
 }
 
+/* Animations */
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-group.conditional {
+  animation: fadeInSlide 0.3s ease-out forwards;
+}
+
+.text-muted {
+  display: block;
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 0.35rem;
+  font-style: italic;
+}
+
 /* Modal Styles */
 .modal-overlay {
   position: fixed;
