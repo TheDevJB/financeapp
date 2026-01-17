@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.financeapp.finance.exception.AccountDoesNotExistException;
 import com.financeapp.finance.exception.TransactionDoesNotExistException;
 import com.financeapp.finance.model.Account;
-import com.financeapp.finance.model.AccountType;
 import com.financeapp.finance.model.Transaction;
 import com.financeapp.finance.model.TransactionType;
 import com.financeapp.finance.repositories.AccountRepository;
@@ -53,14 +52,6 @@ public class TransactionService {
         transactionRepo.save(transaction);
 
         return transaction;
-    }
-
-    public void balanceAmount(BigDecimal dollarAmount, AccountType accountType, Long accountId) {
-        Account account = accountRepo.findByAccountId(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not found with id" + accountId));
-
-        account.setBalance(dollarAmount);
-        accountRepo.save(account);
     }
 
     public Transaction transfer(TransferDTO transferDTO) {

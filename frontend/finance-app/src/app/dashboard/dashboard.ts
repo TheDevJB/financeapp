@@ -1,8 +1,8 @@
-import { Component, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, ChangeDetectorRef, NgZone, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AccountService } from '../services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
@@ -11,7 +11,7 @@ import { Account } from '../models/account.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterModule, CommonModule, FormsModule],
+  imports: [RouterModule, CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
 })
@@ -23,6 +23,8 @@ export class DashboardComponent {
   showAddModal: boolean = false;
   showDeleteModal: boolean = false;
   accountToDeleteId: number | null = null;
+  accountForm!: FormGroup;
+  submitted = false;
 
   account: Account | null = null;
   isLoading: boolean = false;
@@ -38,7 +40,7 @@ export class DashboardComponent {
     private accountService: AccountService,
     private toastr: ToastrService,
     private cdr: ChangeDetectorRef,
-    private ngZone: NgZone
+    private ngZone: NgZone,
   ) { }
 
   ngOnInit() {
@@ -93,22 +95,16 @@ export class DashboardComponent {
     if (!this.validateAccount(account)) return;
     if (this.isLoading) return;
     this.isLoading = true;
+    this.closeAddAccountModal();
+
     this.accountService.createAccount(account).subscribe({
       next: (response) => {
         this.ngZone.run(() => {
           console.log('Account created successfully:', response);
           this.isLoading = false;
-          this.loadAccounts();
           this.toastr.success('Account added successfully');
-
-          setTimeout(() => {
-            this.showAddModal = false;
-            this.account = null;
-            this.formattedBalance = '';
-            this.formattedMinPayment = '';
-            this.loadAccounts();
-            this.cdr.detectChanges();
-          }, 1500);
+          this.loadAccounts();
+          this.cdr.detectChanges();
         });
       },
       error: (error: HttpErrorResponse) => {
@@ -123,7 +119,6 @@ export class DashboardComponent {
   }
 
   private interestAccounts = ['CREDIT_CARD', 'PERSONAL_LOAN', 'CAR_LOAN', 'AFFIRM', 'AFTER_PAY', 'KLARNA', 'SCHOOL_LOAN'];
-  private regAccounts = ['CHECKING', 'SAVINGS', 'MORTGAGE', 'RENT'];
 
   openAddAccountModal() {
     this.account = {
@@ -136,6 +131,14 @@ export class DashboardComponent {
     this.formattedBalance = '';
     this.formattedMinPayment = '';
     this.showAddModal = true;
+  }
+
+  closeAddAccountModal() {
+    this.showAddModal = false;
+    this.account = null;
+    this.formattedBalance = '';
+    this.formattedMinPayment = '';
+    this.isLoading = false;
   }
 
   showInterestAccountFields(type: string): boolean {
