@@ -55,9 +55,7 @@ public class TransactionService {
     }
 
     public Transaction transfer(TransferDTO transferDTO) {
-        if (transferDTO.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Dollar amount is below 0");
-        }
+
         Transaction transaction = new Transaction();
 
         Account sourceAccount = accountRepo.findByAccountId(transferDTO.getSourceAccountId())

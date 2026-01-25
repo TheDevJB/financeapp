@@ -223,4 +223,5 @@ export class DashboardComponent {
       raw: parseFloat(value) || 0
     };
   }
+
 }
