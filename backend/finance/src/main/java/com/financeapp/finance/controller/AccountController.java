@@ -61,7 +61,7 @@ public class AccountController {
     }
 
     @PutMapping("/{accountId}")
-    public ResponseEntity<AccountDTO> updateAccount(@PathVariable Long accountId,
+    public ResponseEntity<AccountDTO> updateAccountBalance(@PathVariable Long accountId,
             @Valid @RequestBody AccountDTO accountDTO) {
         Account updatedAccount = accountService.updateAccountBalance(accountId, accountDTO.getAccountType(),
                 accountDTO.getAmount(), accountDTO.getBalance());
@@ -73,6 +73,7 @@ public class AccountController {
         accountService.deleteAccount(accountId);
         return ResponseEntity.noContent().build();
     }
+
 
     private AccountDTO mapToDTO(Account account) {
         AccountDTO dto = new AccountDTO();
