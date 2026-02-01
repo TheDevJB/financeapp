@@ -9,7 +9,7 @@ import com.financeapp.finance.model.BudgetCategory;
 import com.financeapp.finance.model.User;
 
 public interface BudgetCategoryRepository extends JpaRepository<BudgetCategory, Long> {
-    List<BudgetCategory> findAllByUser(User user);
 
+    List<BudgetCategory> findAllByUser(User user);
     Optional<BudgetCategory> findByUserAndCategoryName(User user, String categoryName);
 }

@@ -11,8 +11,10 @@ import com.financeapp.finance.exception.TransactionDoesNotExistException;
 import com.financeapp.finance.model.Account;
 import com.financeapp.finance.model.Transaction;
 import com.financeapp.finance.model.TransactionType;
+import com.financeapp.finance.model.BudgetCategory;
 import com.financeapp.finance.repositories.AccountRepository;
 import com.financeapp.finance.repositories.TransactionRepository;
+import com.financeapp.finance.repositories.BudgetCategoryRepository;
 import com.financeapp.finance.dto.TransferDTO;
 
 @Service
@@ -20,11 +22,13 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepo;
     private final AccountRepository accountRepo;
+    private final BudgetCategoryRepository budgetCategoryRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
 
-    public TransactionService(TransactionRepository transactionRepo, AccountRepository accountRepo) {
+    public TransactionService(TransactionRepository transactionRepo, AccountRepository accountRepo, BudgetCategoryRepository budgetCategoryRepo) {
         this.transactionRepo = transactionRepo;
         this.accountRepo = accountRepo;
+        this.budgetCategoryRepo = budgetCategoryRepo;
     }
 
     public Transaction getTransactionByTransactionId(Long transactionId) {
@@ -56,26 +60,39 @@ public class TransactionService {
 
     public Transaction transfer(TransferDTO transferDTO) {
 
-        Transaction transaction = new Transaction();
+        Account sourceAccount = accountRepo.findByAccountId(transferDTO.getSourceAccountId()).orElseThrow(AccountDoesNotExistException::new);
+        Account destAccount = accountRepo.findByAccountId(transferDTO.getDestAccountId()).orElseThrow(AccountDoesNotExistException::new);
 
-        Account sourceAccount = accountRepo.findByAccountId(transferDTO.getSourceAccountId())
-                .orElseThrow(AccountDoesNotExistException::new);
-
-        Account destAccount = accountRepo.findByAccountId(transferDTO.getDestAccountId())
-                .orElseThrow(AccountDoesNotExistException::new);
-
-        if (sourceAccount.getBalance().compareTo(transferDTO.getAmount()) < 0) {
-            throw new IllegalArgumentException("Insufficient balance");
-        }
+        BudgetCategory category = budgetCategoryRepo.findByUserAndCategoryName(sourceAccount.getUser(), "Transfers").orElseGet(() -> {
+            BudgetCategory newCategory = new BudgetCategory();
+            newCategory.setUser(sourceAccount.getUser());
+            newCategory.setCategoryName("Transfers");
+            newCategory.setIsFixed(false);
+            return budgetCategoryRepo.save(newCategory);
+        }); 
 
         sourceAccount.setBalance(sourceAccount.getBalance().subtract(transferDTO.getAmount()));
+        LOGGER.info("Transfer from: " + sourceAccount);
+
         destAccount.setBalance(destAccount.getBalance().add(transferDTO.getAmount()));
+        LOGGER.info("Transfer received to: " + destAccount);
+
+        Transaction outTransaction = new Transaction(); 
+        outTransaction.setAccount(sourceAccount);
+        outTransaction.setDollarAmount(transferDTO.getAmount());
+        outTransaction.setCategory(category);
+
+        Transaction inTransaction = new Transaction();
+        inTransaction.setAccount(destAccount);
+        inTransaction.setDollarAmount(transferDTO.getAmount());
+        inTransaction.setCategory(category);
+
+        transactionRepo.save(outTransaction);
+        transactionRepo.save(inTransaction);
 
         accountRepo.save(sourceAccount);
         accountRepo.save(destAccount);
 
-        LOGGER.info("Transfer of " + sourceAccount + "to" + destAccount + "successful");
-
-        return transaction;
+        return outTransaction; 
     }
 }
