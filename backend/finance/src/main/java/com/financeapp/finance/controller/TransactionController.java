@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
+import com.financeapp.finance.dto.TransactionDTO;
 
 @RestController
 @RequestMapping("/api/v1/transactions")
@@ -29,15 +30,23 @@ public class TransactionController {
     }
 
     @PostMapping("/transfer")
-    public ResponseEntity<TransferDTO> transferFunds(@Valid @RequestBody TransferDTO transferDTO) {
+    public ResponseEntity<TransactionDTO> transferFunds(@Valid @RequestBody TransferDTO transferDTO) {
         Transaction transfer = transactionService.transfer(transferDTO);
         return ResponseEntity.ok(mapToDTO(transfer));
     }
 
-    private TransferDTO mapToDTO(Transaction transaction) {
-        TransferDTO dto = new TransferDTO();
-        dto.setAmount(transaction.getDollarAmount());
+    private TransactionDTO mapToDTO(Transaction transaction) {
+        TransactionDTO dto = new TransactionDTO();
+        dto.setTransactionId(transaction.getTransactionId());
+        dto.setUserId(transaction.getUser().getUserId());
+        dto.setDollarAmount(transaction.getDollarAmount());
         dto.setDescription(transaction.getDescription());
+        dto.setAccountId(transaction.getAccount().getAccountId());
+        dto.setTransactionType(transaction.getTransactionType());
+        if (transaction.getCategory() != null) {
+            dto.setCategoryId(transaction.getCategory().getCategoryId());
+        }
+        dto.setTransactionDate(transaction.getTransactionDate());
         return dto;
     }
 

@@ -25,7 +25,8 @@ public class TransactionService {
     private final BudgetCategoryRepository budgetCategoryRepo;
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionService.class);
 
-    public TransactionService(TransactionRepository transactionRepo, AccountRepository accountRepo, BudgetCategoryRepository budgetCategoryRepo) {
+    public TransactionService(TransactionRepository transactionRepo, AccountRepository accountRepo,
+            BudgetCategoryRepository budgetCategoryRepo) {
         this.transactionRepo = transactionRepo;
         this.accountRepo = accountRepo;
         this.budgetCategoryRepo = budgetCategoryRepo;
@@ -60,16 +61,28 @@ public class TransactionService {
 
     public Transaction transfer(TransferDTO transferDTO) {
 
-        Account sourceAccount = accountRepo.findByAccountId(transferDTO.getSourceAccountId()).orElseThrow(AccountDoesNotExistException::new);
-        Account destAccount = accountRepo.findByAccountId(transferDTO.getDestAccountId()).orElseThrow(AccountDoesNotExistException::new);
+        Account sourceAccount = accountRepo.findByAccountId(transferDTO.getSourceAccountId())
+                .orElseThrow(AccountDoesNotExistException::new);
+        Account destAccount = accountRepo.findByAccountId(transferDTO.getDestAccountId())
+                .orElseThrow(AccountDoesNotExistException::new);
 
-        BudgetCategory category = budgetCategoryRepo.findByUserAndCategoryName(sourceAccount.getUser(), "Transfers").orElseGet(() -> {
-            BudgetCategory newCategory = new BudgetCategory();
-            newCategory.setUser(sourceAccount.getUser());
-            newCategory.setCategoryName("Transfers");
-            newCategory.setIsFixed(false);
-            return budgetCategoryRepo.save(newCategory);
-        }); 
+        BudgetCategory category = budgetCategoryRepo.findByUserAndCategoryName(sourceAccount.getUser(), "Transfers")
+                .orElseGet(() -> {
+                    BudgetCategory newCategory = new BudgetCategory();
+                    newCategory.setUser(sourceAccount.getUser());
+                    newCategory.setCategoryName("Transfers");
+                    newCategory.setIsFixed(false);
+                    return budgetCategoryRepo.save(newCategory);
+                });
+
+        BudgetCategory destCategory = budgetCategoryRepo.findByUserAndCategoryName(destAccount.getUser(), "Transfers")
+                .orElseGet(() -> {
+                    BudgetCategory newCategory = new BudgetCategory();
+                    newCategory.setUser(destAccount.getUser());
+                    newCategory.setCategoryName("Transfers");
+                    newCategory.setIsFixed(false);
+                    return budgetCategoryRepo.save(newCategory);
+                });
 
         sourceAccount.setBalance(sourceAccount.getBalance().subtract(transferDTO.getAmount()));
         LOGGER.info("Transfer from: " + sourceAccount);
@@ -77,15 +90,21 @@ public class TransactionService {
         destAccount.setBalance(destAccount.getBalance().add(transferDTO.getAmount()));
         LOGGER.info("Transfer received to: " + destAccount);
 
-        Transaction outTransaction = new Transaction(); 
+        Transaction outTransaction = new Transaction();
         outTransaction.setAccount(sourceAccount);
-        outTransaction.setDollarAmount(transferDTO.getAmount());
+        outTransaction.setUser(sourceAccount.getUser());
+        outTransaction.setDollarAmount(transferDTO.getAmount().negate());
         outTransaction.setCategory(category);
+        outTransaction.setTransactionType(TransactionType.TRANSFER);
+        outTransaction.setDescription(transferDTO.getDescription());
 
         Transaction inTransaction = new Transaction();
         inTransaction.setAccount(destAccount);
+        inTransaction.setUser(destAccount.getUser());
         inTransaction.setDollarAmount(transferDTO.getAmount());
-        inTransaction.setCategory(category);
+        inTransaction.setCategory(destCategory);
+        inTransaction.setTransactionType(TransactionType.TRANSFER);
+        inTransaction.setDescription(transferDTO.getDescription());
 
         transactionRepo.save(outTransaction);
         transactionRepo.save(inTransaction);
@@ -93,6 +112,6 @@ public class TransactionService {
         accountRepo.save(sourceAccount);
         accountRepo.save(destAccount);
 
-        return outTransaction; 
+        return outTransaction;
     }
 }
