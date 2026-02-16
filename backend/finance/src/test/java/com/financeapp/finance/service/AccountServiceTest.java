@@ -102,9 +102,12 @@ public class AccountServiceTest {
 
     @Test
     void createAccount_Success() {
+        testAccount.setAmount(new BigDecimal("1250.00"));
+        testAccount.setBalance(new BigDecimal("1250.00"));
         when(accountRepo.save(any(Account.class))).thenReturn(testAccount);
 
         AccountDTO dto = new AccountDTO();
+        dto.setNickname("Test Account");
         Account result = accountService.createAccount(1L, testUser, AccountType.CHECKING, new BigDecimal("1250.00"),
                 new BigDecimal("1250.00"), dto);
 
