@@ -24,13 +24,14 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping("/user/{userId}/transaction/{transactionId}")
-    public Transaction getTransactionByTransactionId(@PathVariable Integer userId, @PathVariable Long transactionId) {
+    @GetMapping("/transaction/{transactionId}")
+    public Transaction getTransactionByTransactionId(@PathVariable Long transactionId) {
         return transactionService.getTransactionByTransactionId(transactionId);
     }
 
+
     @PostMapping("/transfer")
-    public ResponseEntity<TransactionDTO> transferFunds(@Valid @RequestBody TransferDTO transferDTO) {
+    public ResponseEntity<TransactionDTO> transfer(@Valid @RequestBody TransferDTO transferDTO) {
         Transaction transfer = transactionService.transfer(transferDTO);
         return ResponseEntity.ok(mapToDTO(transfer));
     }

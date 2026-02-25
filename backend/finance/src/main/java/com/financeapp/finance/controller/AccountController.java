@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,14 +57,6 @@ public class AccountController {
     public ResponseEntity<List<AccountDTO>> getAllAccountsByUser(@PathVariable Long userId) {
         List<Account> accounts = accountService.getAllAccountsByUserId(userId);
         return ResponseEntity.ok(accounts.stream().map(this::mapToDTO).toList());
-    }
-
-    @PutMapping("/{accountId}")
-    public ResponseEntity<AccountDTO> updateAccountBalance(@PathVariable Long accountId,
-            @Valid @RequestBody AccountDTO accountDTO) {
-        Account updatedAccount = accountService.updateAccountBalance(accountId, accountDTO.getAccountType(),
-                accountDTO.getAmount(), accountDTO.getBalance());
-        return ResponseEntity.ok(mapToDTO(updatedAccount));
     }
 
     @DeleteMapping("/{accountId}")

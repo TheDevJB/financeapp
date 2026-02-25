@@ -68,24 +68,6 @@ public class AccountService {
         }
     }
 
-    public Account updateAccountBalance(Long accountId, AccountType accountType, BigDecimal amount,
-            BigDecimal balance) {
-        Account account = getAccountById(accountId);
-
-        if (accountType != account.getAccountType()) {
-            throw new AccountDoesNotExistException("This account type is not valid");
-        }
-
-        account.setAccountType(accountType);
-        account.setAmount(amount);
-        account.setBalance(balance);
-        accountRepo.save(account);
-
-        LOGGER.info("Account balance updated");
-
-        return account;
-    }
-
     public List<Account> getAllAccountsByUserId(Long userId) {
         return accountRepo.findAllByUser_UserId(userId);
     }
