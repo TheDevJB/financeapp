@@ -36,11 +36,6 @@ public class TransactionService {
         return transactionRepo.findByTransactionId(transactionId).orElseThrow(TransactionDoesNotExistException::new);
     }
 
-    public Transaction getTransactionByAccountAndTransactionId(Account account, Long transactionId) {
-        return transactionRepo.findByAccountAndTransactionId(account, transactionId)
-                .orElseThrow(TransactionDoesNotExistException::new);
-    }
-
     public Transaction getTransactionType(TransactionType transactionType, BigDecimal dollarAmount,
             Account account, String description) {
         Transaction transaction = new Transaction();
