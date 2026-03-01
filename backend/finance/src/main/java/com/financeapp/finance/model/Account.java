@@ -32,7 +32,7 @@ public class Account {
     @Column(name = "balance")
     private BigDecimal balance;
 
-    @Column(name = "account_type")
+    @Column(name = "account_type", length = 25)
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
 
