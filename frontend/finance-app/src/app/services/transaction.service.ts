@@ -13,4 +13,9 @@ export class Transaction {
   getTransactionByTransactionId(transactionId: number): Observable<Transaction> {
     return this.http.get<Transaction>(`${this.apiUrl}/transaction/${transactionId}`);
   }
+
+  transfer(transactionId: number): Observable<Transaction> {
+    return this.http.post<Transaction>(this.apiUrl, transactionId);
+  }
+
 }
