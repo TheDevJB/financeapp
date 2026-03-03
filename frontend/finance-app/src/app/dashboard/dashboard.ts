@@ -6,7 +6,7 @@ import { FormGroup, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AccountService } from '../services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
-import { Account } from '../models/account.model';
+import { Account } from '../models/account';
 
 @Component({
   selector: 'app-dashboard',
