@@ -15,8 +15,8 @@ export class AccountService {
         return this.http.post<Account>(this.apiUrl, account);
     }
 
-    getAccount(accountId: number): Observable<Account> {
-        return this.http.get<Account>(`${this.apiUrl}/${accountId}`);
+    getAccount(accountId: number): Observable<Account[]> {
+        return this.http.get<Account[]>(`${this.apiUrl}/${accountId}`);
     }
 
     getAllAccountsByUser(userId: number): Observable<Account[]> {

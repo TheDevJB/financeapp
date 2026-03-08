@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Transaction } from '../models/transaction';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class Transaction {
+export class TransactionService {
   private apiUrl = 'http://localhost:8080/api/v1/transactions';
 
   constructor(private http: HttpClient) { }
