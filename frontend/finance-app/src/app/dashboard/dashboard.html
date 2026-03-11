@@ -11,16 +11,9 @@
 
   <div class="dashboard-content">
     <div class="dashboard-header">
-      <h1>Your Finance Dashboard</h1>
+      <h1>Finance Dashboard</h1>
       <p>Manage your money</p>
     </div>
-
-    <div class="dashboard-grid">
-      <!-- Total Balance Card -->
-      <div class="dashboard-card">
-        <h3>Total Balance</h3>
-        <p class="balance">{{ totalBalance | currency }}</p>
-      </div>
 
       <!-- Accounts List Card -->
       <div class="dashboard-card">
@@ -30,11 +23,10 @@
           @for (account of accounts; track account.accountId) {
           <div class="account-item">
             <div class="account-info">
-              <span class="account-name">{{ account.nickname || account.accountType }}</span>
-              <span class="account-type">{{ account.accountType }}</span>
+              <span class="account-name">{{ account.nickname }}</span>
             </div>
             <div class="account-actions">
-              <span class="account-balance">{{ account.balance | currency }}</span>
+              <span class="account-balance">{{ account.balance }}</span>
               <button class="btn-delete" (click)="deleteAccountModal(account.accountId!)" title="Delete Account">
                 <i class="fas fa-trash"></i> Delete
               </button>
@@ -56,7 +48,6 @@
       </div>
     </div>
   </div>
-</div>
 
 <!-- Delete Confirmation Modal -->
 @if (showDeleteModal) {
@@ -94,7 +85,7 @@
         placeholder="e.g. Account Name">
     </div>
     <div class="form-group">
-      <label for="balance">Current Balance / Amount</label>
+      <label for="balance">Current Balance</label>
       <input type="text" id="balance" [ngModel]="formattedBalance" (input)="formatBalance($event)" class="form-control"
         placeholder="$0.00">
     </div>
