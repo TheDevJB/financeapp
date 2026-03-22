@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import com.financeapp.finance.dto.TransactionDTO;
 
 @RestController
@@ -33,7 +34,7 @@ public class TransactionController {
     @PostMapping("/transfer")
     public ResponseEntity<TransactionDTO> transfer(@Valid @RequestBody TransferDTO transferDTO) {
         Transaction transfer = transactionService.transfer(transferDTO);
-        return ResponseEntity.ok(mapToDTO(transfer));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapToDTO(transfer));
     }
 
     private TransactionDTO mapToDTO(Transaction transaction) {

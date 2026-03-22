@@ -112,7 +112,7 @@ export class DashboardComponent {
       },
       error: (error: HttpErrorResponse) => {
         this.ngZone.run(() => {
-          console.error('Error adding account:', error);
+          console.error('Error adding account: ', error);
           this.isLoading = false;
           this.toastr.error('Failed to add account', 'Error');
           this.cdr.detectChanges();
@@ -125,8 +125,15 @@ export class DashboardComponent {
     this.transactionService.getTransactionByTransactionId(transactionId).subscribe({
       next: (retrieveId) => {
         this.ngZone.run(() => {
-          console.log('Here is the ID', retrieveId);
-//          const getAccountId = this.accountService.getAccount(accountId);
+          console.log('ID available', retrieveId);
+          this.isLoading = false;
+        })
+      },
+      error: (error: HttpErrorResponse) => {
+        this.ngZone.run(() => {
+          console.error('Error retrieving ID: ', error);
+          this.isLoading = false;
+          this.cdr.detectChanges();
         })
       }
     })
