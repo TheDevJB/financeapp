@@ -137,8 +137,8 @@ export class DashboardComponent {
         })
       }
     })
+    this.accountId = accountId;
   }
-
 
   private interestAccounts = ['CREDIT_CARD', 'PERSONAL_LOAN', 'CAR_LOAN', 'AFFIRM', 'AFTER_PAY', 'KLARNA', 'SCHOOL_LOAN'];
 
