@@ -45,10 +45,6 @@ public class Transaction {
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "category_id", nullable = false)
-    private BudgetCategory category;
-
     @CreationTimestamp
     @Column(name = "transaction_date")
     private Instant transactionDate;

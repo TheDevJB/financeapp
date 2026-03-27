@@ -45,9 +45,6 @@ public class TransactionController {
         dto.setDescription(transaction.getDescription());
         dto.setAccountId(transaction.getAccount().getAccountId());
         dto.setTransactionType(transaction.getTransactionType());
-        if (transaction.getCategory() != null) {
-            dto.setCategoryId(transaction.getCategory().getCategoryId());
-        }
         dto.setTransactionDate(transaction.getTransactionDate());
         return dto;
     }
