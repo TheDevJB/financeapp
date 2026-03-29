@@ -4,5 +4,4 @@ export interface Transaction {
   dollarAmount: number;
   description: string;
   accountId?: number;
-  categoryId?: number;
 }
