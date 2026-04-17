@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.financeapp.finance.exception.AccountDoesNotExistException;
 import com.financeapp.finance.exception.TransactionDoesNotExistException;
@@ -49,22 +50,25 @@ public class TransactionService {
         return transaction;
     }
 
+    @Transactional
     public Transaction transfer(TransferDTO transferDTO) {
 
-        Account sourceAccount = accountRepo.findByAccountId(transferDTO.getSourceAccountId())
+        Account originalAccount = accountRepo.findByAccountId(transferDTO.getSourceAccountId())
                 .orElseThrow(AccountDoesNotExistException::new);
         Account destAccount = accountRepo.findByAccountId(transferDTO.getDestAccountId())
                 .orElseThrow(AccountDoesNotExistException::new);
 
-        sourceAccount.setBalance(sourceAccount.getBalance().subtract(transferDTO.getAmount()));
-        LOGGER.info("Transfer from: " + sourceAccount);
+        if (transferDTO.getAmount() != null && originalAccount.equals(destAccount)) {
+            originalAccount.setBalance(originalAccount.getBalance().subtract(transferDTO.getAmount()));
+        }
 
-        destAccount.setBalance(destAccount.getBalance().add(transferDTO.getAmount()));
-        LOGGER.info("Transfer success " + destAccount);
+        if (transferDTO.getAmount() != null && destAccount.equals(originalAccount)) {
+            destAccount.setBalance(destAccount.getBalance().add(transferDTO.getAmount()));
+        }
 
         Transaction outTransaction = new Transaction();
-        outTransaction.setAccount(sourceAccount);
-        outTransaction.setUser(sourceAccount.getUser());
+        outTransaction.setAccount(originalAccount);
+        outTransaction.setUser(originalAccount.getUser());
         outTransaction.setDollarAmount(transferDTO.getAmount().negate());
         outTransaction.setTransactionType(TransactionType.TRANSFER);
         outTransaction.setDescription(transferDTO.getDescription());
@@ -79,7 +83,7 @@ public class TransactionService {
         transactionRepo.save(outTransaction);
         transactionRepo.save(inTransaction);
 
-        accountRepo.save(sourceAccount);
+        accountRepo.save(originalAccount);
         accountRepo.save(destAccount);
 
         return outTransaction;
